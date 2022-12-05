@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Navbar from "./components/Navbar";
+import Homepage from "./pages/Homepage";
+
+import fetchProfile from "./api/auth";
+import { useSelector, useDispatch } from "react-redux";
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      movies: [],
+      search: "",
+    };
+  }
+
+  componentDidMount() {
+    this.setUserData();
+  }
+
+  setUserData = async () => {
+    const dispatch = useDispatch();
+    const userDataSlice = useSelector((state) => state.userData);
+    const data = await fetchProfile().then((res) => res.data);
+    dispatch(userDataSlice.actions.setLoginStatus(data));
+  };
+
+  render() {
+    return (
+      <div>
+        <Navbar />
+        <Homepage />
+      </div>
+    );
+  }
 }
-
-export default App;
