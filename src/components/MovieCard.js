@@ -11,7 +11,7 @@ export default class MovieCard extends Component {
       overview: this.props.overview,
       id: this.props.id,
       genre_ids: this.props.genre_ids,
-      genereDB: this.props.genereDB,
+      genreDB: this.props.genreDB,
     };
     this.trimGeners = this.trimGeners.bind(this);
   }
@@ -60,7 +60,7 @@ export default class MovieCard extends Component {
                 key={id}
               >
                 <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
-                  {this.state.genereDB.find((genre) => genre.id === id).name}
+                  {this.state.genreDB.find((genre) => genre.id === id).name}
                 </span>
               </a>
             ))}

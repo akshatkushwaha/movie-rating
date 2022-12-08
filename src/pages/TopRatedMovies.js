@@ -2,9 +2,9 @@ import React, { Component } from "react";
 
 import MovieCard from "../components/MovieCard";
 
-import { getUpcomingMovies, getGenres } from "../api/movies";
+import { getTopRatedMovies, getGenres } from "../api/movies";
 
-export default class UpcomingMovies extends Component {
+export default class PopularMovies extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,21 +16,21 @@ export default class UpcomingMovies extends Component {
       nextButtonClass: "",
       genreDB: [],
     };
-    this.fetchUpcomingMovies = this.fetchUpcomingMovies.bind(this);
+    this.fetchTopRatedMovies = this.fetchTopRatedMovies.bind(this);
     this.nextPage = this.nextPage.bind(this);
     this.previousPage = this.previousPage.bind(this);
     this.fetchGenresDB = this.fetchGenresDB.bind(this);
   }
 
   componentDidMount() {
-    this.fetchUpcomingMovies();
+    this.fetchTopRatedMovies();
     this.fetchGenresDB();
   }
 
-  fetchUpcomingMovies = async () => {
+  fetchTopRatedMovies = async () => {
     const page = Number(window.location.pathname.split("/")[2]);
     try {
-      const movies = await getUpcomingMovies(page);
+      const movies = await getTopRatedMovies(page);
       this.setState({ movies: movies.data.results });
       this.setState({ totalPages: movies.data.total_pages });
       this.setState({ currentPage: movies.data.page });
@@ -62,11 +62,11 @@ export default class UpcomingMovies extends Component {
   };
 
   nextPage = () => {
-    window.location.href = `/upcoming/${this.state.currentPage + 1}`;
+    window.location.href = `/toprated/${this.state.currentPage + 1}`;
   };
 
   previousPage = () => {
-    window.location.href = `/upcoming/${this.state.currentPage - 1}`;
+    window.location.href = `/toprated/${this.state.currentPage - 1}`;
   };
 
   render() {
@@ -75,7 +75,7 @@ export default class UpcomingMovies extends Component {
         <div className="flex flex-col items-center justify-center">
           <div className="container flex flex-row flex-wrap justify-center">
             <h1 className="text-4xl font-bold text-center text-gray-800 p-4">
-              Upcoming Movies
+              Top Rated Movies
             </h1>
             <div className="flex flex-row flex-wrap justify-between w-full px-28 py-10">
               <p className="text-base font-bold text-center text-gray-800">

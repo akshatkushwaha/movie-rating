@@ -47,6 +47,38 @@ const getSimilarMovies = async (id) =>
     },
   });
 
+const getTopRatedMovies = async (page) =>
+  await axios.get(BASE_URL + "top_rated", {
+    params: {
+      api_key: api_key,
+      page: page,
+    },
+  });
+
+const getUpcomingMovies = async (page) =>
+  await axios.get(BASE_URL + "upcoming", {
+    params: {
+      api_key: api_key,
+      page: page,
+    },
+  });
+
+const getNowPlayingMovies = async (page) =>
+  await axios.get(BASE_URL + "now_playing", {
+    params: {
+      api_key: api_key,
+      page: page,
+    },
+  });
+
+const getLatestMovie = async (page) =>
+  await axios.get(BASE_URL + "latest", {
+    params: {
+      api_key: api_key,
+      page: page,
+    },
+  });
+
 export {
   getPopularMovies,
   getMovie,
@@ -54,4 +86,8 @@ export {
   getMovieProviders,
   getMovieDetails,
   getSimilarMovies,
+  getTopRatedMovies,
+  getUpcomingMovies,
+  getNowPlayingMovies,
+  getLatestMovie,
 };

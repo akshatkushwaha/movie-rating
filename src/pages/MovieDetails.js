@@ -90,7 +90,6 @@ export default class MovieDetails extends Component {
     try {
       const similar = await getSimilarMovies(this.state.id, 1);
       this.setState({ similar: similar.data.results });
-      console.log(this.state.similar);
     } catch (error) {
       console.log(error);
     }
@@ -100,7 +99,6 @@ export default class MovieDetails extends Component {
     try {
       const genres = await getGenres();
       this.setState({ genreDB: genres.data.genres });
-      console.log(this.state.genreDB);
     } catch (error) {
       console.log(error);
     }
@@ -154,7 +152,7 @@ export default class MovieDetails extends Component {
                   </div>
                   <div className="py-2">
                     <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
-                      {this.state.movie_generes}
+                      {this.state.genre_list}
                     </span>
                   </div>
                 </div>
@@ -239,7 +237,7 @@ export default class MovieDetails extends Component {
             </div>
           </div>
           {/* Similar Movies */}
-          {/* <div className="movie-details__recommended container mx-auto px-10">
+          <div className="movie-details__recommended container mx-auto px-10">
             <h1 className="text-3xl font-bold py-8">Similar</h1>
             <div className="movie-details__recommended__scroll flex flex-row flex-nowrap">
               <div className="flex flex-row flex-wrap justify-center">
@@ -263,7 +261,7 @@ export default class MovieDetails extends Component {
                 )}
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </>
     );

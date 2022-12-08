@@ -14,7 +14,7 @@ export default class PopularMovies extends Component {
       totalResults: 0,
       prevButtonClass: "",
       nextButtonClass: "",
-      genereDB: [],
+      genreDB: [],
     };
     this.fetchPopularMovies = this.fetchPopularMovies.bind(this);
     this.nextPage = this.nextPage.bind(this);
@@ -55,17 +55,17 @@ export default class PopularMovies extends Component {
   fetchGenresDB = async () => {
     try {
       const genres = await getGenres();
-      this.setState({ genereDB: genres.data.genres });
+      this.setState({ genreDB: genres.data.genres });
     } catch (error) {
       console.log(error);
     }
   };
 
-  nextPage = async () => {
+  nextPage = () => {
     window.location.href = `/popular/${this.state.currentPage + 1}`;
   };
 
-  previousPage = async () => {
+  previousPage = () => {
     window.location.href = `/popular/${this.state.currentPage - 1}`;
   };
 
@@ -74,7 +74,7 @@ export default class PopularMovies extends Component {
       <>
         <div className="flex flex-col items-center justify-center">
           <div className="container flex flex-row flex-wrap justify-center">
-            <h1 className="text-4xl font-bold text-center text-gray-800">
+            <h1 className="text-4xl font-bold text-center text-gray-800 p-4">
               Popular Movies
             </h1>
             <div className="flex flex-row flex-wrap justify-between w-full px-28 py-10">
@@ -92,7 +92,7 @@ export default class PopularMovies extends Component {
                   <MovieCard
                     key={movie.id}
                     {...movie}
-                    genereDB={this.state.genereDB}
+                    genreDB={this.state.genreDB}
                   />
                 ))
               ) : (

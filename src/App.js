@@ -8,6 +8,9 @@ import Navbar from "./components/Navbar";
 import PopularMovies from "./pages/PopularMovies";
 import Homepage from "./pages/Homepage";
 import MovieDetails from "./pages/MovieDetails";
+import TopRatedMovies from "./pages/TopRatedMovies";
+import UpcomingMovies from "./pages/UpcomingMovies";
+import NowPLaying from "./pages/NowPlaying";
 
 export default class App extends Component {
   constructor(props) {
@@ -39,6 +42,9 @@ export default class App extends Component {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/popular/:page" element={<PopularMovies />} />
+            <Route path="/toprated/:page" element={<TopRatedMovies />} />
+            <Route path="/upcoming/:page" element={<UpcomingMovies />} />
+            <Route path="/nowplaying/:page" element={<NowPLaying />} />
             <Route path="/movie/:id" element={<MovieDetails />} />
           </Routes>
         </BrowserRouter>
