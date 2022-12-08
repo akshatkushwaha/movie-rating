@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-
-import Navbar from "./components/Navbar";
-import Homepage from "./pages/Homepage";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 import fetchProfile from "./api/auth";
 import { useSelector, useDispatch } from "react-redux";
+
+import Navbar from "./components/Navbar";
+import PopularMovies from "./pages/PopularMovies";
+import Homepage from "./pages/Homepage";
+import MovieDetails from "./pages/MovieDetails";
 
 export default class App extends Component {
   constructor(props) {
@@ -13,24 +16,32 @@ export default class App extends Component {
       movies: [],
       search: "",
     };
+    // this.setUserData = this.setUserData.bind(this);
   }
 
-  componentDidMount() {
-    this.setUserData();
-  }
+  // componentDidMount() {
+  //   this.setUserData();
+  // }
 
-  setUserData = async () => {
-    const dispatch = useDispatch();
-    const userDataSlice = useSelector((state) => state.userData);
-    const data = await fetchProfile().then((res) => res.data);
-    dispatch(userDataSlice.actions.setLoginStatus(data));
-  };
+  // setUserData = async () => {
+  //   const dispatch = useDispatch();
+  //   const userDataSlice = useSelector((state) => state.userData);
+  //   const data = await fetchProfile().then((res) => res.data);
+  //   dispatch(userDataSlice.actions.setLoginStatus(data));
+  // };
 
   render() {
     return (
       <div>
         <Navbar />
-        <Homepage />
+
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/popular/:page" element={<PopularMovies />} />
+            <Route path="/movie/:id" element={<MovieDetails />} />
+          </Routes>
+        </BrowserRouter>
       </div>
     );
   }
