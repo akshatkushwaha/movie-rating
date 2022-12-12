@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import fetchProfile from "./api/auth";
 import { useSelector, useDispatch } from "react-redux";
@@ -37,17 +37,14 @@ export default class App extends Component {
     return (
       <div>
         <Navbar />
-
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/popular/:page" element={<PopularMovies />} />
-            <Route path="/toprated/:page" element={<TopRatedMovies />} />
-            <Route path="/upcoming/:page" element={<UpcomingMovies />} />
-            <Route path="/nowplaying/:page" element={<NowPLaying />} />
-            <Route path="/movie/:id" element={<MovieDetails />} />
-          </Routes>
-        </BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/popular/:page" element={<PopularMovies />} />
+          <Route path="/toprated/:page" element={<TopRatedMovies />} />
+          <Route path="/upcoming/:page" element={<UpcomingMovies />} />
+          <Route path="/nowplaying/:page" element={<NowPLaying />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
+        </Routes>
       </div>
     );
   }
