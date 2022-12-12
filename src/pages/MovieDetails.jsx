@@ -50,7 +50,7 @@ export default class MovieDetails extends Component {
 
   fetchMovie = async () => {
     try {
-      const id = window.location.pathname.split("/")[2];
+      const id = window.location.pathname.split("/").pop();
       this.setState({ id: id });
       const movie = await getMovie(id);
       this.setState({ title: movie.data.title });
@@ -120,146 +120,140 @@ export default class MovieDetails extends Component {
   render() {
     return (
       <>
-        <div className="relative">
-          {/* Backdrop */}
-          <div className="movie-details__backdrop w-full overflow-hidden blur-sm opacity-30">
-            <img
-              className="w-full object-cover bg-cover bg-center"
-              src={
-                "https://image.tmdb.org/t/p/original" + this.state.backdrop_path
-              }
-              alt={this.state.title}
-            />
-          </div>
-          {/*  */}
-          <div className="w-full absolute top-0 left-0">
-            <div className="movie-details flex flex-row flex-wrap container mx-auto p-10 justify-around top-0">
-              <div className="movie-details__poster w-fit overflow-hidden rounded-lg mx-5 flex flex-col">
-                <img
-                  src={
-                    "https://image.tmdb.org/t/p/w300" + this.state.poster_path
-                  }
-                  alt={this.state.title}
-                />
-              </div>
-              <div className="movie-details__info w-2/3">
-                <h1 className="text-5xl font-bold ">{this.state.title}</h1>
-                <div className="py-2">
-                  <div className="py-2">
-                    <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
-                      {this.state.runtime} min | {this.state.release_date}
-                    </span>
-                  </div>
-                  <div className="py-2">
-                    <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
-                      {this.state.genre_list}
-                    </span>
-                  </div>
-                </div>
-                {/* Watch Providers */}
-                <div className="py-2">
-                  <div className="flex flex-row flex-wrap">
-                    {this.state.watchProviders?.rent?.length > 0 && (
-                      <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
-                        Rent:
-                      </span>
-                    )}
-                    {this.state.watchProviders?.rent?.map((provider) => (
-                      <img
-                        src={
-                          "https://image.tmdb.org/t/p/w300" + provider.logo_path
-                        }
-                        alt={provider.provider_name}
-                        className="inline-block h-8 m-2 rounded-full"
-                      />
-                    ))}
-                  </div>
-                  <div className="flex flex-row flex-wrap">
-                    {this.state.watchProviders?.buy?.length > 0 && (
-                      <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
-                        Buy:
-                      </span>
-                    )}
-                    {this.state.watchProviders?.buy?.map((provider) => (
-                      <img
-                        src={
-                          "https://image.tmdb.org/t/p/w300" + provider.logo_path
-                        }
-                        alt={provider.provider_name}
-                        className="inline-block h-8 m-2 rounded-full"
-                      />
-                    ))}
-                  </div>
-                  <div className="flex flex-row flex-wrap">
-                    {this.state.watchProviders?.flatrate?.length > 0 && (
-                      <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
-                        Flatrate:
-                      </span>
-                    )}
-                    {this.state.watchProviders?.flatrate?.map((provider) => (
-                      <img
-                        src={
-                          "https://image.tmdb.org/t/p/w300" + provider.logo_path
-                        }
-                        alt={provider.provider_name}
-                        className="inline-block h-8 m-2 rounded-full"
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className="movie-details__overview container py-4">
-                  <h1 className="text-3xl font-bold">Overview</h1>
-                  <p className="text-lg py-4">{this.state.overview}</p>
-                </div>
-              </div>
+        {/* Backdrop */}
+        <div className="movie-details__backdrop w-full overflow-hidden blur-sm opacity-30 fixed">
+          <img
+            className="w-full object-cover bg-cover bg-center"
+            src={
+              "https://image.tmdb.org/t/p/original" + this.state.backdrop_path
+            }
+            alt={this.state.title}
+          />
+        </div>
+        {/*  */}
+        <div className="w-full pt-12">
+          <div className="movie-details flex flex-row flex-wrap container mx-auto p-10 justify-around top-0">
+            <div className="movie-details__poster w-fit overflow-hidden rounded-lg mx-5 flex flex-col">
+              <img
+                src={"https://image.tmdb.org/t/p/w300" + this.state.poster_path}
+                alt={this.state.title}
+              />
             </div>
-            <div className="movie-details__cast container mx-auto px-10">
-              <h1 className="text-3xl font-bold p-10">Cast</h1>
-              {/* Horizontal Scroll */}
-              <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">
-                {this.state.cast.map((cast) => (
-                  <div key={cast.id} className="flex flex-col items-start m-5">
-                    <div className="movie-details__cast__scroll__image w-32 overflow-hidden rounded-lg">
-                      <img
-                        src={
-                          "https://image.tmdb.org/t/p/w500" + cast.profile_path
-                        }
-                        alt={cast.name}
-                      />
-                    </div>
-                    <span className="text-base font-bold">{cast.name}</span>
-                    <span className="text-base font-mono">
-                      {cast.character}
-                    </span>
-                  </div>
-                ))}
+            <div className="movie-details__info w-2/3">
+              <h1 className="text-5xl font-bold ">{this.state.title}</h1>
+              <div className="py-2">
+                <div className="py-2">
+                  <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
+                    {this.state.runtime} min | {this.state.release_date}
+                  </span>
+                </div>
+                <div className="py-2">
+                  <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
+                    {this.state.genre_list}
+                  </span>
+                </div>
               </div>
-            </div>
-          </div>
-          {/* Similar Movies */}
-          <div className="movie-details__recommended container mx-auto px-10">
-            <h1 className="text-3xl font-bold py-8">Similar</h1>
-            <div className="movie-details__recommended__scroll flex flex-row flex-nowrap">
-              <div className="flex flex-row flex-wrap justify-center">
-                {this.state.similar.map.length > 0 ? (
-                  this.state.similar.map((movie) => (
-                    <MovieCard
-                      key={movie.id}
-                      {...movie}
-                      genreDB={this.state.genreDB}
+              {/* Watch Providers */}
+              <div className="py-2">
+                <div className="flex flex-row flex-wrap">
+                  {this.state.watchProviders?.rent?.length > 0 && (
+                    <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
+                      Rent:
+                    </span>
+                  )}
+                  {this.state.watchProviders?.rent?.map((provider) => (
+                    <img
+                      src={
+                        "https://image.tmdb.org/t/p/w300" + provider.logo_path
+                      }
+                      alt={provider.provider_name}
+                      className="inline-block h-8 m-2 rounded-full"
                     />
-                  ))
-                ) : (
-                  <div className="flex flex-col items-center justify-center">
-                    <h1 className="text-3xl font-bold">
-                      No Similar Movies Found
-                    </h1>
-                    <h1 className="text-3xl font-bold">
-                      Try Searching for a Movie
-                    </h1>
-                  </div>
-                )}
+                  ))}
+                </div>
+                <div className="flex flex-row flex-wrap">
+                  {this.state.watchProviders?.buy?.length > 0 && (
+                    <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
+                      Buy:
+                    </span>
+                  )}
+                  {this.state.watchProviders?.buy?.map((provider) => (
+                    <img
+                      src={
+                        "https://image.tmdb.org/t/p/w300" + provider.logo_path
+                      }
+                      alt={provider.provider_name}
+                      className="inline-block h-8 m-2 rounded-full"
+                    />
+                  ))}
+                </div>
+                <div className="flex flex-row flex-wrap">
+                  {this.state.watchProviders?.flatrate?.length > 0 && (
+                    <span className="inline-block py-1 text-base font-semibold text-gray-700 mr-2">
+                      Flatrate:
+                    </span>
+                  )}
+                  {this.state.watchProviders?.flatrate?.map((provider) => (
+                    <img
+                      src={
+                        "https://image.tmdb.org/t/p/w300" + provider.logo_path
+                      }
+                      alt={provider.provider_name}
+                      className="inline-block h-8 m-2 rounded-full"
+                    />
+                  ))}
+                </div>
               </div>
+              <div className="movie-details__overview container py-4">
+                <h1 className="text-3xl font-bold">Overview</h1>
+                <p className="text-lg py-4">{this.state.overview}</p>
+              </div>
+            </div>
+          </div>
+          <div className="movie-details__cast container mx-auto px-10">
+            <h1 className="text-3xl font-bold p-10">Cast</h1>
+            {/* Horizontal Scroll */}
+            <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">
+              {this.state.cast.map((cast) => (
+                <div key={cast.id} className="flex flex-col items-start m-5">
+                  <div className="movie-details__cast__scroll__image w-32 overflow-hidden rounded-lg">
+                    <img
+                      src={
+                        "https://image.tmdb.org/t/p/w500" + cast.profile_path
+                      }
+                      alt={cast.name}
+                    />
+                  </div>
+                  <span className="text-base font-bold">{cast.name}</span>
+                  <span className="text-base font-mono">{cast.character}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        {/* Similar Movies */}
+        <div className="movie-details__recommended container mx-auto px-10">
+          <h1 className="text-3xl font-bold py-8">Similar</h1>
+          <div className="movie-details__recommended__scroll flex flex-row flex-nowrap">
+            <div className="flex flex-row flex-wrap justify-center">
+              {this.state.similar.map.length > 0 ? (
+                this.state.similar.map((movie) => (
+                  <MovieCard
+                    key={movie.id}
+                    {...movie}
+                    genreDB={this.state.genreDB}
+                  />
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center">
+                  <h1 className="text-3xl font-bold">
+                    No Similar Movies Found
+                  </h1>
+                  <h1 className="text-3xl font-bold">
+                    Try Searching for a Movie
+                  </h1>
+                </div>
+              )}
             </div>
           </div>
         </div>

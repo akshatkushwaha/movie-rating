@@ -28,7 +28,7 @@ export default class PopularMovies extends Component {
   }
 
   fetchPopularMovies = async () => {
-    const page = Number(window.location.pathname.split("/")[2]);
+    const page = window.location.href.split("/").pop();
     try {
       const movies = await getPopularMovies(page);
       this.setState({ movies: movies.data.results });

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 export default class MovieCard extends Component {
   constructor(props) {
@@ -29,7 +30,7 @@ export default class MovieCard extends Component {
     return (
       <>
         <div className="max-w-xs rounded overflow-hidden shadow-2xl m-4 transform transition duration-500 hover:scale-110">
-          <a href={`/movie/${this.state.id}`}>
+          <Link to={`/movie/${this.state.id}`}>
             <div className="w-full rounded overflow-hidden h-96">
               <img
                 className="w-full"
@@ -51,18 +52,14 @@ export default class MovieCard extends Component {
                 </span>
               </div>
             </div>
-          </a>
+          </Link>
           <div className="px-4 p-4 flex flex-row overflow-hidden bg-white">
             {this.state.genre_ids.map((id) => (
-              <a
-                className="transform transition duration-500 hover:scale-110"
-                href={`/genre/${id}`}
-                key={id}
-              >
+              <Link key={id} to={`/genre/${id}`}>
                 <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
                   {this.state.genreDB.find((genre) => genre.id === id).name}
                 </span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>

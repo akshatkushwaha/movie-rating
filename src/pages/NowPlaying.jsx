@@ -28,7 +28,7 @@ export default class NowPLaying extends Component {
   }
 
   fetchNowPlayingMovies = async () => {
-    const page = Number(window.location.pathname.split("/")[2]);
+    const page = window.location.href.split("/").pop();
     try {
       const movies = await getNowPlayingMovies(page);
       this.setState({ movies: movies.data.results });

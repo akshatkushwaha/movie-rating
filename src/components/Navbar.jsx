@@ -1,6 +1,7 @@
 import { Component, Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
 export default class Navbar extends Component {
   constructor(props) {
@@ -21,7 +22,8 @@ export default class Navbar extends Component {
   }
 
   componentDidMount() {
-    const currentPage = window.location.pathname.split("/")[1];
+    const urlArray = window.location.pathname.split("/");
+    const currentPage = urlArray[urlArray.length - 2];
     const navigation = this.state.navigation;
     navigation.forEach((item) => {
       if (item.name.split(" ").join("").toLowerCase() === currentPage) {
@@ -37,7 +39,7 @@ export default class Navbar extends Component {
 
   render() {
     return (
-      <Disclosure as="nav" className="bg-gray-800">
+      <Disclosure as="nav" className="bg-gray-800 w-full fixed z-30">
         {({ open }) => (
           <>
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -69,19 +71,19 @@ export default class Navbar extends Component {
                   <div className="hidden sm:ml-6 sm:block">
                     <div className="flex space-x-4">
                       {this.state.navigation.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className={this.classNames(
-                            item.current
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium"
-                          )}
-                          aria-current={item.current ? "page" : undefined}
-                        >
-                          {item.name}
-                        </a>
+                        <Link key={item.name} to={item.href}>
+                          <h3
+                            className={this.classNames(
+                              item.current
+                                ? "bg-gray-900 text-white"
+                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium"
+                            )}
+                            aria-current={item.current ? "page" : undefined}
+                          >
+                            {item.name}
+                          </h3>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -123,7 +125,7 @@ export default class Navbar extends Component {
                                 leaveTo="transform opacity-0 scale-95"
                               >
                                 <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                  <Menu.Item>
+                                  {/* <Menu.Item>
                                     {({ active }) => (
                                       <a
                                         href="#"
@@ -161,7 +163,7 @@ export default class Navbar extends Component {
                                         Sign out
                                       </a>
                                     )}
-                                  </Menu.Item>
+                                  </Menu.Item> */}
                                 </Menu.Items>
                               </Transition>
                             </Menu>
@@ -171,18 +173,16 @@ export default class Navbar extends Component {
                     </Menu>
                   ) : (
                     <div className="flex items-center space-x-3">
-                      <a
-                        href="#"
-                        className="text-sm font-medium text-gray-300 hover:text-white"
-                      >
-                        Sign in
-                      </a>
-                      <a
-                        href="#"
-                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
-                      >
-                        Sign up
-                      </a>
+                      <Link to="/login">
+                        <h2 className="text-sm font-medium text-gray-300 hover:text-white">
+                          Sign in
+                        </h2>
+                      </Link>
+                      <Link to="/register">
+                        <h2 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+                          Sign up
+                        </h2>
+                      </Link>
                     </div>
                   )}
                 </div>
@@ -192,20 +192,19 @@ export default class Navbar extends Component {
             <Disclosure.Panel className="sm:hidden">
               <div className="space-y-1 px-2 pt-2 pb-3">
                 {this.state.navigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    className={this.classNames(
-                      item.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "block px-3 py-2 rounded-md text-base font-medium"
-                    )}
-                    aria-current={item.current ? "page" : undefined}
-                  >
-                    {item.name}
-                  </Disclosure.Button>
+                  <Link key={item.name} to={item.href}>
+                    <Disclosure.Button
+                      className={this.classNames(
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium"
+                      )}
+                      aria-current={item.current ? "page" : undefined}
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                  </Link>
                 ))}
               </div>
             </Disclosure.Panel>
