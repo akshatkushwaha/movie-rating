@@ -1,75 +1,69 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 
 import MovieCard from "../components/MovieCard";
 
 import { getPopularMovies, getGenres } from "../api/movies";
 
-export default class PopularMovies extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      movies: [],
-      totalPages: -1,
-      currentPage: 0,
-      totalResults: 0,
-      prevButtonClass: "",
-      nextButtonClass: "",
-      genreDB: [],
-    };
-    this.fetchPopularMovies = this.fetchPopularMovies.bind(this);
-    this.nextPage = this.nextPage.bind(this);
-    this.previousPage = this.previousPage.bind(this);
-    this.fetchGenresDB = this.fetchGenresDB.bind(this);
-  }
+export default function PopularMovies() {
+  const [movies, setMovies] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalResults, setTotalResults] = useState(0);
+  const [genreDB, setGenreDB] = useState([]);
+  const [prevButtonClass, setPrevButtonClass] = useState("");
+  const [nextButtonClass, setNextButtonClass] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  componentDidMount() {
-    this.fetchPopularMovies();
-    this.fetchGenresDB();
-  }
+  useEffect(() => {
+    fetchMovies();
 
-  fetchPopularMovies = async () => {
-    const page = window.location.href.split("/").pop();
-    try {
-      const movies = await getPopularMovies(page);
-      this.setState({ movies: movies.data.results });
-      this.setState({ totalPages: movies.data.total_pages });
-      this.setState({ currentPage: movies.data.page });
-      this.setState({ totalResults: movies.data.total_results });
-
-      if (this.state.currentPage === 1) {
-        this.setState({ prevButtonClass: "hidden" });
-      } else {
-        this.setState({ prevButtonClass: "block" });
-      }
-
-      if (this.state.currentPage === this.state.totalPages) {
-        this.setState({ nextButtonClass: "hidden" });
-      } else {
-        this.setState({ nextButtonClass: "block" });
-      }
-    } catch (error) {
-      console.log(error);
+    if (currentPage === 1) {
+      setPrevButtonClass("opacity-50 cursor-not-allowed");
+    } else {
+      setPrevButtonClass("");
     }
-  };
 
-  fetchGenresDB = async () => {
-    try {
-      const genres = await getGenres();
-      this.setState({ genreDB: genres.data.genres });
-    } catch (error) {
-      console.log(error);
+    if (currentPage === totalPages) {
+      setNextButtonClass("opacity-50 cursor-not-allowed");
+    } else {
+      setNextButtonClass("");
     }
+  }, [currentPage]);
+
+  const fetchMovies = async () => {
+    setLoading(true);
+    await getGenres()
+      .then((res) => {
+        setGenreDB(res.data.genres);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+
+    await getPopularMovies(currentPage)
+      .then((res) => {
+        setMovies(res.data.results);
+        setTotalPages(res.data.total_pages);
+        setTotalResults(res.data.total_results);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setLoading(false);
   };
 
-  nextPage = () => {
-    window.location.href = `/popular/${this.state.currentPage + 1}`;
-  };
-
-  previousPage = () => {
-    window.location.href = `/popular/${this.state.currentPage - 1}`;
-  };
-
-  render() {
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="text-4xl font-bold text-center text-gray-800 p-4">
+          Loading...
+        </h1>
+      </div>
+    );
+  } else {
     return (
       <>
         <div className="flex flex-col items-center justify-center">
@@ -79,45 +73,50 @@ export default class PopularMovies extends Component {
             </h1>
             <div className="flex flex-row flex-wrap justify-between w-full px-28 py-10">
               <p className="text-base font-bold text-center text-gray-800">
-                Page {this.state.currentPage} of {this.state.totalPages} Pages
+                Page {currentPage} of {totalPages} Pages
               </p>
               <p className="text-base font-bold text-center text-gray-800">
-                Total Results: {this.state.totalResults}
+                Total Results: {totalResults}
               </p>
             </div>
-
-            <div className="flex flex-row flex-wrap justify-center">
-              {this.state.movies.map.length > 0 ? (
-                this.state.movies.map((movie) => (
-                  <MovieCard
-                    key={movie.id}
-                    {...movie}
-                    genreDB={this.state.genreDB}
-                  />
-                ))
-              ) : (
-                <h1 className="text-4xl font-bold text-center text-gray-800">
-                  No Movies Found
-                </h1>
-              )}
-            </div>
+            {movies.length > 0 ? (
+              <div className="flex flex-row flex-wrap justify-center">
+                {movies.map.length > 0 ? (
+                  movies.map((movie) => (
+                    <MovieCard key={movie.id} {...movie} genreDB={genreDB} />
+                  ))
+                ) : (
+                  <h1 className="text-4xl font-bold text-center text-gray-800">
+                    No Movies Found
+                  </h1>
+                )}
+              </div>
+            ) : (
+              <h1 className="text-4xl font-bold text-center text-gray-800">
+                No Movies Found
+              </h1>
+            )}
           </div>
           <div className="flex flex-row justify-center py-5">
             <button
               className={
-                this.state.prevButtonClass +
+                prevButtonClass +
                 " bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-4"
               }
-              onClick={this.previousPage}
+              onClick={() => {
+                setCurrentPage(currentPage - 1);
+              }}
             >
               Previous
             </button>
             <button
               className={
-                this.state.nextButtonClass +
+                nextButtonClass +
                 " bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-4"
               }
-              onClick={this.nextPage}
+              onClick={() => {
+                setCurrentPage(currentPage + 1);
+              }}
             >
               Next
             </button>
