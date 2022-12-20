@@ -11,6 +11,7 @@ import {
 import { Link, useParams } from "react-router-dom";
 
 export default function MovieDetails() {
+  const navigation = useNavigate();
   const { id } = useParams();
   const [movie, setMovie] = useState({});
   const [cast, setCast] = useState([]);
@@ -79,11 +80,14 @@ export default function MovieDetails() {
               </div>
               <div className="pt-2">
                 {genreList?.map((genre) => (
-                  <Link key={genre.id} to={`/genre/${genre.id}`}>
-                    <span className="inline-block py-1 text-base font-mono font-semibold mr-2">
-                      {genre.name} |
-                    </span>
-                  </Link>
+                  <span
+                    className="inline-block py-1 text-base font-mono font-semibold mr-2 hover:cursor-pointer"
+                    onClick={() => {
+                      navigation(`/genre/${genre.id}`);
+                    }}
+                  >
+                    {genre.name} |
+                  </span>
                 ))}
               </div>
             </div>
@@ -105,23 +109,25 @@ export default function MovieDetails() {
           <h1 className="text-3xl font-bold p-10">Cast</h1>
           <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">
             {cast.map((cast) => (
-              <Link key={cast.id} to={`/person/${cast.id}`}>
-                <div className="flex flex-col items-start m-5">
-                  <div className="movie-details__cast__scroll__image w-32 overflow-hidden rounded-lg">
-                    <img
-                      src={
-                        cast.profile_path !== null
-                          ? "https://image.tmdb.org/t/p/w300" +
-                            cast.profile_path
-                          : "https://via.placeholder.com/300x450"
-                      }
-                      alt={cast.name}
-                    />
-                  </div>
-                  <span className="text-base font-bold">{cast.name}</span>
-                  <span className="text-base font-mono">{cast.character}</span>
+              <div
+                className="flex flex-col items-start m-5 hover:cursor-pointer"
+                onClick={() => {
+                  navigation(`/person/${cast.id}`);
+                }}
+              >
+                <div className="movie-details__cast__scroll__image w-32 overflow-hidden rounded-lg">
+                  <img
+                    src={
+                      cast.profile_path !== null
+                        ? "https://image.tmdb.org/t/p/w300" + cast.profile_path
+                        : "https://via.placeholder.com/300x450"
+                    }
+                    alt={cast.name}
+                  />
                 </div>
-              </Link>
+                <span className="text-base font-bold">{cast.name}</span>
+                <span className="text-base font-mono">{cast.character}</span>
+              </div>
             ))}
           </div>
         </div>
