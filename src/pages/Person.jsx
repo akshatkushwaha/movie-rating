@@ -25,12 +25,13 @@ export default function Person() {
     fetchPersonDetails();
     fetchPersonCombinedCredits();
     fetchPersonsExternalIds();
-    fetchPersonImages();
-    fetchPersonTaggedImages();
+    // fetchPersonImages();
+    // fetchPersonTaggedImages();
   }, []);
 
   const fetchPersonDetails = async () => {
     const response = await getPersonDetails(id);
+    document.title = `Person | ${response.data.name}`;
     setPerson(response.data);
   };
 

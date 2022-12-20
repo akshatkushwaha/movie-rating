@@ -28,6 +28,7 @@ export default function MovieDetails() {
 
   const fetchMovie = async () => {
     const movie = await getMovie(id);
+    document.title = `Movie | ${movie.data.title}`;
     setMovie(movie.data);
   };
 

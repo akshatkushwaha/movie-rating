@@ -42,6 +42,8 @@ export default function MoviesGrid() {
     }
 
     pageNumberGenerator();
+
+    document.title = `Movies | ${Title} | Page ${currentPage}`;
   }, [currentPage, path]);
 
   const fetchMovies = async () => {
