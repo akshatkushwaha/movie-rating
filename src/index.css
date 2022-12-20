@@ -15,3 +15,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.movie-details__cast__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.movie_card_genre::-webkit-scrollbar {
+  display: none;
+}
+
+.person_images_scroll::-webkit-scrollbar {
+  display: none;
+}

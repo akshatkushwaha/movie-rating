@@ -2,10 +2,10 @@ import axios from "axios";
 
 const api_key = "48d198c2c635e2c64caa41df6e4acda6";
 
-const BASE_URL = "https://api.themoviedb.org/3/movie/";
+const BASE_URL = "https://api.themoviedb.org/3";
 
 const getPopularMovies = async (page) =>
-  await axios.get(BASE_URL + "popular", {
+  await axios.get(BASE_URL + "/movie/popular", {
     params: {
       api_key: api_key,
       page: page,
@@ -13,42 +13,42 @@ const getPopularMovies = async (page) =>
   });
 
 const getGenres = async () =>
-  await axios.get("https://api.themoviedb.org/3/genre/movie/list", {
+  await axios.get(BASE_URL + "/genre/movie/list", {
     params: {
-      api_key: "48d198c2c635e2c64caa41df6e4acda6",
+      api_key: api_key,
     },
   });
 
 const getMovie = async (id) =>
-  await axios.get(BASE_URL + id, {
+  await axios.get(BASE_URL + "/movie/" + id, {
     params: {
       api_key: api_key,
     },
   });
 
 const getMovieProviders = async (id) =>
-  await axios.get(BASE_URL + id + "/watch/providers", {
+  await axios.get(BASE_URL + "/movie/" + id + "/watch/providers", {
     params: {
       api_key: api_key,
     },
   });
 
 const getMovieDetails = async (id) =>
-  await axios.get(BASE_URL + id + "/credits", {
+  await axios.get(BASE_URL + "/movie/" + id + "/credits", {
     params: {
       api_key: api_key,
     },
   });
 
 const getSimilarMovies = async (id) =>
-  await axios.get(BASE_URL + id + "/similar", {
+  await axios.get(BASE_URL + "/movie/" + id + "/similar", {
     params: {
       api_key: api_key,
     },
   });
 
 const getTopRatedMovies = async (page) =>
-  await axios.get(BASE_URL + "top_rated", {
+  await axios.get(BASE_URL + "/movie/top_rated", {
     params: {
       api_key: api_key,
       page: page,
@@ -56,7 +56,7 @@ const getTopRatedMovies = async (page) =>
   });
 
 const getUpcomingMovies = async (page) =>
-  await axios.get(BASE_URL + "upcoming", {
+  await axios.get(BASE_URL + "/movie/upcoming", {
     params: {
       api_key: api_key,
       page: page,
@@ -64,7 +64,7 @@ const getUpcomingMovies = async (page) =>
   });
 
 const getNowPlayingMovies = async (page) =>
-  await axios.get(BASE_URL + "now_playing", {
+  await axios.get(BASE_URL + "/movie/now_playing", {
     params: {
       api_key: api_key,
       page: page,
@@ -72,10 +72,18 @@ const getNowPlayingMovies = async (page) =>
   });
 
 const getLatestMovie = async (page) =>
-  await axios.get(BASE_URL + "latest", {
+  await axios.get(BASE_URL + "/movie/latest", {
     params: {
       api_key: api_key,
       page: page,
+    },
+  });
+
+const getMovieUsingQuery = async (query) =>
+  await axios.get(BASE_URL + "/search/multi", {
+    params: {
+      api_key: api_key,
+      query: query,
     },
   });
 
@@ -90,4 +98,5 @@ export {
   getUpcomingMovies,
   getNowPlayingMovies,
   getLatestMovie,
+  getMovieUsingQuery,
 };
