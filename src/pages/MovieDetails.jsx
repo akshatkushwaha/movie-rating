@@ -24,7 +24,7 @@ export default function MovieDetails() {
     fetchMovieDetails();
     fetchSimilarMovies();
     genrateGenreList();
-  }, []);
+  });
 
   const fetchMovie = async () => {
     const movie = await getMovie(id);

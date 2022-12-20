@@ -4,16 +4,15 @@ import { getTvDetails } from "../api/Tv";
 
 export default function TvDetails() {
   const id = window.location.pathname.split("/")[2];
-  const [tv, setTv] = useState(null);
+  const [tv, setTv] = useState({});
 
   useEffect(() => {
     fetchTvDetails();
-  }, []);
+  });
 
   const fetchTvDetails = async () => {
     const response = await getTvDetails(id);
     setTv(response.data);
-    console.log(response.data);
   };
 
   return (

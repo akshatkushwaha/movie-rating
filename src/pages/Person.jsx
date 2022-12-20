@@ -27,7 +27,7 @@ export default function Person() {
     fetchPersonsExternalIds();
     // fetchPersonImages();
     // fetchPersonTaggedImages();
-  }, []);
+  });
 
   const fetchPersonDetails = async () => {
     const response = await getPersonDetails(id);
