@@ -33,7 +33,7 @@ export default function MovieCard(props) {
           </div>
           <div className="py-2 px-4">
             <h1 className="text-xl font-bold py-2 h-20">{props.title}</h1>
-            <div>
+            <div className="text-neutral-content">
               <span className="bg-neutral inline-block rounded-full px-3 py-1 mr-2 text-sm font-semibold">
                 {props.vote_average}
               </span>
@@ -46,7 +46,7 @@ export default function MovieCard(props) {
         <div className="movie_card_genre my-2 px-2 flex flex-row overflow-x-scroll">
           {props.genre_ids?.map((id) => (
             <Link reloadDocument key={id} to={`/genre/${id}`}>
-              <span className="bg-neutral inline-block rounded-full px-3 py-1 m-1 text-sm font-semibold">
+              <span className="bg-neutral text-neutral-content inline-block rounded-full px-3 py-1 m-1 text-sm font-semibold">
                 {props.genreDB?.find((genre) => genre.id === id)?.name}
               </span>
             </Link>

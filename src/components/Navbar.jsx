@@ -8,6 +8,7 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import { themeChange } from "theme-change";
 
 import { getMovieUsingQuery } from "../api/movies";
 
@@ -22,23 +23,31 @@ export default function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [theme, setTheme] = useState("light");
+  const themes = [
+    "light",
+    "dark",
+    "cupcake",
+    "retro",
+    "halloween",
+    "garden",
+    "forest",
+    "lofi",
+    "pastel",
+    "fantasy",
+    "luxury",
+    "dracula",
+    "cmyk",
+    "autumn",
+    "business",
+    "coffee",
+  ];
 
   useEffect(() => {
+    themeChange(false);
     if (localStorage.getItem("token")) {
       setLoggedIn(true);
     }
-  }, []);
-
-  const changeTheme = () => {
-    if (theme === "light") {
-      setTheme("dark");
-      document.documentElement.classList.add("dark");
-    } else {
-      setTheme("light");
-      document.documentElement.classList.remove("dark");
-    }
-  };
+  });
 
   const handleSearch = async (search) => {
     setSearch(search);
@@ -60,7 +69,7 @@ export default function Navbar() {
   };
 
   return (
-    <Disclosure as="nav" className="bg-base-300">
+    <Disclosure as="nav" className="bg-base-300 fixed w-full z-30">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl">
@@ -160,19 +169,6 @@ export default function Navbar() {
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center">
-                      <button
-                        className="p-1 rounded-full text-base-content hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-base-300 focus:ring-white"
-                        onClick={changeTheme}
-                      >
-                        <span className="sr-only">View notifications</span>
-                        {theme === "dark" ? (
-                          <MoonIcon className="h-6 w-6" aria-hidden="true" />
-                        ) : (
-                          <SunIcon className="h-6 w-6" aria-hidden="true" />
-                        )}
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -262,6 +258,25 @@ export default function Navbar() {
                     </Link>
                   </div>
                 )}
+              </div>
+              <div className="dropdown dropdown-hover">
+                <label tabIndex={0} className="btn m-1">
+                  Theme
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  {themes.map((theme) => {
+                    return (
+                      <li key={theme}>
+                        <option data-set-theme={theme}>
+                          {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                        </option>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </div>
           </div>

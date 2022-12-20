@@ -69,7 +69,7 @@ export default function MovieDetails() {
               alt={movie.title}
             />
           </div>
-          <div className="movie-details__info w-2/3">
+          <div className="movie-details__info w-2/3 text-gray-100">
             <h1 className="text-5xl font-bold ">{movie.title}</h1>
             <div className="py-2">
               <div className="py-2">
