@@ -87,6 +87,23 @@ const getMovieUsingQuery = async (query) =>
     },
   });
 
+const getMovieExternalIds = async (id) =>
+  await axios.get(BASE_URL + "/movie/" + id + "/external_ids", {
+    params: {
+      api_key: api_key,
+    },
+  });
+
+const getMoviesByGenre = async (genreId, page) =>
+  await axios.get(BASE_URL + "/discover/movie", {
+    params: {
+      api_key: api_key,
+      with_genres: genreId,
+      page: page,
+      // sort_by: "vote_average.desc",
+    },
+  });
+
 export {
   getPopularMovies,
   getMovie,
@@ -99,4 +116,6 @@ export {
   getNowPlayingMovies,
   getLatestMovie,
   getMovieUsingQuery,
+  getMovieExternalIds,
+  getMoviesByGenre,
 };

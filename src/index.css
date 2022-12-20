@@ -27,3 +27,7 @@ code {
 .person_images_scroll::-webkit-scrollbar {
   display: none;
 }
+
+.tv-details__cast__scroll::-webkit-scrollbar {
+  display: none;
+}

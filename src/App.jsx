@@ -7,6 +7,7 @@ import MovieDetails from "./pages/MovieDetails";
 import Person from "./pages/Person";
 import TvDetails from "./pages/TvDetails";
 import PageNotFound from "./pages/PageNotFound";
+import GenreGrid from "./pages/GenreGrid";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/movie/:id" element={<MovieDetails />} />
         <Route path="/person/:id" element={<Person />} />
         <Route path="/tv/:id" element={<TvDetails />} />
+        <Route path="/genre/:id/:page" element={<GenreGrid />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>

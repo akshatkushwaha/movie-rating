@@ -45,7 +45,7 @@ export default function MovieCard(props) {
         </Link>
         <div className="movie_card_genre my-2 px-2 flex flex-row overflow-x-scroll">
           {props.genre_ids?.map((id) => (
-            <Link reloadDocument key={id} to={`/genre/${id}`}>
+            <Link reloadDocument key={id} to={`/genre/${id}/1`}>
               <span className="bg-neutral text-neutral-content inline-block rounded-full px-3 py-1 m-1 text-sm font-semibold">
                 {props.genreDB?.find((genre) => genre.id === id)?.name}
               </span>

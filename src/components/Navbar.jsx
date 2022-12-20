@@ -292,12 +292,12 @@ export default function Navbar() {
                     as="Link"
                     to={`/${item}/1`}
                     className={classNames(
-                      item == path
+                      item === path
                         ? "bg-base-100 text-base-content"
                         : "text-base-content hover:bg-base-100 hover:text-white",
                       "block px-3 py-2 rounded-md text-base font-medium"
                     )}
-                    aria-current={item == path ? "page" : undefined}
+                    aria-current={item === path ? "page" : undefined}
                   >
                     {displayItem}
                   </Disclosure.Button>

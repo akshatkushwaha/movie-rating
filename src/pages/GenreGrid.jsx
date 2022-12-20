@@ -4,19 +4,13 @@ import MovieCard from "../components/MovieCard";
 
 import { useNavigate } from "react-router-dom";
 
-import {
-  getGenres,
-  getPopularMovies,
-  getTopRatedMovies,
-  getUpcomingMovies,
-  getNowPlayingMovies,
-} from "../api/movies";
+import { getGenres, getMoviesByGenre } from "../api/movies";
 
-export default function MoviesGrid() {
+export default function GenreGrid() {
   const navigation = useNavigate();
-  const path = window.location.pathname.split("/")[1];
-  const Title = path.charAt(0).toUpperCase() + path.slice(1);
-  const currentPage = parseInt(window.location.pathname.split("/")[2]) || 1;
+  const genreId = window.location.pathname.split("/")[2];
+  const [title, setTitle] = useState("");
+  const currentPage = parseInt(window.location.pathname.split("/")[3]) || 1;
   const [movies, setMovies] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [totalResults, setTotalResults] = useState(0);
@@ -43,72 +37,31 @@ export default function MoviesGrid() {
 
     pageNumberGenerator();
 
-    document.title = `Movies | ${Title} | Page ${currentPage}`;
-  }, [currentPage, path]);
+    document.title = `Movies | ${title} | Page ${currentPage}`;
+  }, [currentPage]);
 
   const fetchMovies = async () => {
     setLoading(true);
     await getGenres()
       .then((res) => {
         setGenreDB(res.data.genres);
+        setTitle(
+          res.data.genres.find((genre) => genre.id === parseInt(genreId)).name
+        );
       })
       .catch((err) => {
         console.log(err);
       });
 
-    if (path === "toprated") {
-      fetchTopRatedMovies();
-    } else if (path === "upcoming") {
-      fetchUpcomingMovies();
-    } else if (path === "nowplaying") {
-      fetchNowPlayingMovies();
-    } else {
-      fetchPopularMovies();
-    }
+    fetchMoviesByGenre();
 
     setTimeout(() => {
       setLoading(false);
     }, 400);
   };
 
-  const fetchPopularMovies = async () => {
-    await getPopularMovies(currentPage)
-      .then((res) => {
-        setMovies(res.data.results);
-        setTotalPages(res.data.total_pages);
-        setTotalResults(res.data.total_results);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchTopRatedMovies = async () => {
-    await getTopRatedMovies(currentPage)
-      .then((res) => {
-        setMovies(res.data.results);
-        setTotalPages(res.data.total_pages);
-        setTotalResults(res.data.total_results);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchUpcomingMovies = async () => {
-    await getUpcomingMovies(currentPage)
-      .then((res) => {
-        setMovies(res.data.results);
-        setTotalPages(res.data.total_pages);
-        setTotalResults(res.data.total_results);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchNowPlayingMovies = async () => {
-    await getNowPlayingMovies(currentPage)
+  const fetchMoviesByGenre = async () => {
+    await getMoviesByGenre(genreId, currentPage)
       .then((res) => {
         setMovies(res.data.results);
         setTotalPages(res.data.total_pages);
@@ -182,7 +135,7 @@ export default function MoviesGrid() {
           <div className="mt-16 container flex flex-row flex-wrap justify-center">
             {movies.length > 0 ? (
               <div className="flex flex-row flex-wrap justify-center">
-                <h1 className="text-4xl font-bold text-center  p-4">{Title}</h1>
+                <h1 className="text-4xl font-bold text-center  p-4">{title}</h1>
                 <div className="flex flex-row flex-wrap justify-between w-full pb-8 px-20">
                   <p className="text-base font-bold text-center ">
                     Page {currentPage} of {totalPages} Pages
@@ -210,7 +163,7 @@ export default function MoviesGrid() {
                 prevButtonClass
               }
               onClick={() => {
-                navigation(`/${path}/${currentPage - 1}`);
+                navigation(`/genre/${genreId}/${currentPage - 1}`);
               }}
             >
               Previous
@@ -221,7 +174,7 @@ export default function MoviesGrid() {
                   key={number}
                   className="h-14 w-14 mx-4 rounded bg-primary hover:bg-primary-focus"
                   onClick={() => {
-                    navigation(`/${path}/${number}`);
+                    navigation(`/${genreId}/${number}`);
                   }}
                 >
                   {number}
@@ -234,7 +187,7 @@ export default function MoviesGrid() {
                 nextButtonClass
               }
               onClick={() => {
-                navigation(`/${path}/${currentPage + 1}`);
+                navigation(`/genre/${genreId}/${currentPage + 1}`);
               }}
             >
               Next
