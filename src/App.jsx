@@ -9,10 +9,6 @@ import TvDetails from "./pages/TvDetails";
 import PageNotFound from "./pages/PageNotFound";
 
 export default function App() {
-  useEffect(() => {
-    console.log(process.env);
-  }, []);
-
   return (
     <div>
       <Navbar />
