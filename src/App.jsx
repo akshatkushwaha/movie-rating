@@ -21,6 +21,7 @@ export default function App() {
         <Route path="/movie/:id" element={<MovieDetails />} />
         <Route path="/person/:id" element={<Person />} />
         <Route path="/tv/:id" element={<TvDetails />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
   );

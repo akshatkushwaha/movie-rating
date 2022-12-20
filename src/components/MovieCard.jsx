@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
+import { useNavigate } from "react-router-dom";
+
 export default function MovieCard(props) {
   const navigation = useNavigate();
   const genre_ids = props.genre_ids;
