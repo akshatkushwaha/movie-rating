@@ -1,50 +1,73 @@
-import React, { useState, Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  MoonIcon,
+  SunIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
+import { getMovieUsingQuery } from "../api/movies";
+
+const navigation = ["popular", "toprated", "upcoming", "nowplaying"];
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
 export default function Navbar() {
+  const path = window.location.pathname.split("/")[1];
   const [loggedIn, setLoggedIn] = useState(false);
-  const [navigation, setNavigation] = useState([
-    { name: "Home", href: "/", current: false },
-    { name: "Popular", href: "/popular", current: false },
-    { name: "Top Rated", href: "/toprated", current: false },
-    { name: "Upcoming", href: "/upcoming", current: false },
-    { name: "Now Playing", href: "/nowplaying", current: false },
-  ]);
+  const [search, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    const urlArray = window.location.pathname.split("/");
-    const currentPage = urlArray[urlArray.length - 2];
-    navigation.forEach((item) => {
-      if (item.name.split(" ").join("").toLowerCase() === currentPage) {
-        item.current = true;
-      }
-    });
-    setNavigation(navigation);
-  });
+    if (localStorage.getItem("token")) {
+      setLoggedIn(true);
+    }
+  }, []);
 
-  const classNames = (...classes) => {
-    return classes.filter(Boolean).join(" ");
+  const changeTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+      document.documentElement.classList.add("dark");
+    } else {
+      setTheme("light");
+      document.documentElement.classList.remove("dark");
+    }
   };
 
-  const handleLogin = () => {
-    setLoggedIn(true);
+  const handleSearch = async (search) => {
+    setSearch(search);
+    if (search === "") {
+      setSearchResults([]);
+    } else {
+      await getMovieUsingQuery(search)
+        .then((res) => {
+          setSearchResults(res.data.results);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
-  const handleLogout = () => {
-    setLoggedIn(false);
+  const fullSearch = () => {
+    window.location.href = `/search/${search}/1`;
   };
 
   return (
-    <Disclosure as="nav" className="bg-gray-800 w-full fixed z-30">
+    <Disclosure as="nav" className="bg-base-300">
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-base-content hover:bg-base-200 hover:text-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -55,135 +78,187 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
+                  <Link to="/">
+                    <div className="block lg:hidden h-8 w-auto font-sans font-bold text-lg">
+                      Movie Rating
+                    </div>
+                    <div className="hidden lg:block h-8 w-auto font-sans font-extrabold text-xl">
+                      Movie Rating
+                    </div>
+                  </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <Link reloadDocument key={item.name} to={item.href}>
-                        <h3
-                          className={classNames(
-                            item.current
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium"
-                          )}
-                          aria-current={item.current ? "page" : undefined}
-                        >
-                          {item.name}
-                        </h3>
-                      </Link>
-                    ))}
+                    {navigation.map((item) => {
+                      const displayItem =
+                        item.charAt(0).toUpperCase() + item.slice(1);
+                      return (
+                        <Link to={`/${item}/1`} key={item}>
+                          <div
+                            className={classNames(
+                              path === item
+                                ? "bg-base-100 text-base-content"
+                                : "text-base-content hover:bg-base-100 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium"
+                            )}
+                          >
+                            {displayItem}
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+              <div className="w-96 flex items-center justify-end sm:items-stretch sm:justify-start ">
+                <div className="w-full hidden sm:ml-6 sm:block ">
+                  <div className="w-full flex space-x-4 ">
+                    <div className="w-full relative">
+                      <input
+                        type="text"
+                        name="search"
+                        id="search"
+                        placeholder="Search"
+                        className="bg-base-100 text-base-content rounded-md border-none block pl-6 pr-3 py-2 w-full sm:text-sm border-base-300"
+                        onChange={(e) => handleSearch(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            fullSearch();
+                          }
+                        }}
+                      />
+                      <MagnifyingGlassIcon
+                        className="absolute top-1/2 right-2 transform -translate-y-1/2 h-5 w-5 text-base-content"
+                        onClick={fullSearch}
+                      />
+                      {searchResults.length > 0 && (
+                        <div className="absolute w-full top-full left-0 bg-base-100 rounded-md shadow-lg z-30">
+                          {searchResults.map((result) => (
+                            <Link
+                              reloadDocument
+                              to={`${result.media_type}/${result.id}`}
+                              key={result.id}
+                              className="block px-4 py-2 text-base-content hover:bg-base-200"
+                            >
+                              <img
+                                src={
+                                  result.poster_path
+                                    ? `https://image.tmdb.org/t/p/w500${result.poster_path}`
+                                    : result.profile_path
+                                    ? `https://image.tmdb.org/t/p/w500${result.profile_path}`
+                                    : "https://via.placeholder.com/500x750"
+                                }
+                                alt={result.title || result.name}
+                                className="w-10 h-10 rounded-md object-cover inline-block mr-2"
+                              />
+
+                              <span className="text-sm">
+                                {result.title || result.name}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-center">
+                      <button
+                        className="p-1 rounded-full text-base-content hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-base-300 focus:ring-white"
+                        onClick={changeTheme}
+                      >
+                        <span className="sr-only">View notifications</span>
+                        {theme === "dark" ? (
+                          <MoonIcon className="h-6 w-6" aria-hidden="true" />
+                        ) : (
+                          <SunIcon className="h-6 w-6" aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
-                  type="button"
-                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6 mx-4" aria-hidden="true" />
-                </button>
+                {/* Profile dropdown */}
                 {loggedIn ? (
-                  <Menu as="div" className="ml-3 relative">
-                    {({ open }) => (
-                      <>
-                        <div>
-                          {/* Profile dropdown */}
-                          <Menu as="div" className="relative ml-3">
-                            <div>
-                              <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                <span className="sr-only">Open user menu</span>
-                                <img
-                                  className="h-8 w-8 rounded-full"
-                                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                  alt=""
-                                />
-                              </Menu.Button>
-                            </div>
-                            <Transition
-                              as={Fragment}
-                              enter="transition ease-out duration-100"
-                              enterFrom="transform opacity-0 scale-95"
-                              enterTo="transform opacity-100 scale-100"
-                              leave="transition ease-in duration-75"
-                              leaveFrom="transform opacity-100 scale-100"
-                              leaveTo="transform opacity-0 scale-95"
+                  <Menu as="div" className="relative ml-3">
+                    <div>
+                      <Menu.Button className="flex rounded-full bg-base-300 text-sm">
+                        <span className="sr-only">Open user menu</span>
+                        <img
+                          className="h-8 w-8 rounded-full"
+                          src="https://ui-avatars.com/api/?background=random"
+                          alt="profile"
+                        />
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-base-300 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-base-content text-base-100"
+                                  : "text-base-content",
+                                "block px-4 py-2 text-sm"
+                              )}
                             >
-                              <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                <Menu.Item>
-                                  {({ active }) => (
-                                    <a
-                                      href="#"
-                                      className={this.classNames(
-                                        active ? "bg-gray-100" : "",
-                                        "block px-4 py-2 text-sm text-gray-700"
-                                      )}
-                                    >
-                                      Your Profile
-                                    </a>
-                                  )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                  {({ active }) => (
-                                    <a
-                                      href="#"
-                                      className={this.classNames(
-                                        active ? "bg-gray-100" : "",
-                                        "block px-4 py-2 text-sm text-gray-700"
-                                      )}
-                                    >
-                                      Settings
-                                    </a>
-                                  )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                  {({ active }) => (
-                                    <a
-                                      href="#"
-                                      className={this.classNames(
-                                        active ? "bg-gray-100" : "",
-                                        "block px-4 py-2 text-sm text-gray-700"
-                                      )}
-                                    >
-                                      Sign out
-                                    </a>
-                                  )}
-                                </Menu.Item>
-                              </Menu.Items>
-                            </Transition>
-                          </Menu>
-                        </div>
-                      </>
-                    )}
+                              Your Profile
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-base-content text-base-100"
+                                  : "text-base-content",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              Settings
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active
+                                  ? "bg-base-content text-base-100"
+                                  : "text-base-content",
+                                "block px-4 py-2 text-sm"
+                              )}
+                            >
+                              Sign out
+                            </a>
+                          )}
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Transition>
                   </Menu>
                 ) : (
-                  <div className="flex items-center space-x-3">
+                  <div className="flex flex-row">
                     <Link to="/login">
-                      <h2
-                        className="text-sm font-medium text-gray-300 hover:text-white"
-                        onClick={handleLogin}
-                      >
-                        Sign in
-                      </h2>
+                      <div className="px-3 py-2 m-2 rounded-md text-sm font-medium text-accent-content bg-accent hover:bg-accent-focus">
+                        Login
+                      </div>
                     </Link>
                     <Link to="/register">
-                      <h2
-                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
-                        onClick={handleLogout}
-                      >
-                        Sign up
-                      </h2>
+                      <div className="px-3 py-2 m-2 rounded-md text-sm font-medium text-primary-content bg-primary hover:bg-primary-focus">
+                        Register
+                      </div>
                     </Link>
                   </div>
                 )}
@@ -193,21 +268,26 @@ export default function Navbar() {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
-              {navigation.map((item) => (
-                <Link reloadDocument key={item.name} to={item.href}>
+              {navigation.map((item) => {
+                const displayItem =
+                  item.charAt(0).toUpperCase() + item.slice(1);
+                return (
                   <Disclosure.Button
+                    key={item}
+                    as="Link"
+                    to={`/${item}/1`}
                     className={classNames(
-                      item.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      item == path
+                        ? "bg-base-100 text-base-content"
+                        : "text-base-content hover:bg-base-100 hover:text-white",
                       "block px-3 py-2 rounded-md text-base font-medium"
                     )}
-                    aria-current={item.current ? "page" : undefined}
+                    aria-current={item == path ? "page" : undefined}
                   >
-                    {item.name}
+                    {displayItem}
                   </Disclosure.Button>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </Disclosure.Panel>
         </>
