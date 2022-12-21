@@ -92,7 +92,7 @@ export default function Person() {
     return (
       <>
         <div className="w-full pt-12 bg-base-300">
-          <div className="mt-16 container flex flex-row flex-wrap justify-around py-8 px-8 mx-auto rounded-2xl bg-gray-900">
+          <div className="mt-16 container flex flex-row flex-wrap justify-around py-8 px-8 mx-auto rounded-2xl bg-neutral">
             <div className="flex flex-col md:w-1/4 rounded-lg overflow-hidden">
               <img
                 src={
@@ -103,12 +103,13 @@ export default function Person() {
                 alt={person.name}
               />
             </div>
-            <div className="flex flex-col py-4 md:py-0 md:w-2/3">
+            <div className="flex flex-col py-4 md:py-0 md:w-2/3 text-neutral-content">
               <div className="flex flex-row flex-wrap item-end">
-                <h1 className="text-2xl md:text-5xl font-bold text-base-content mb-4">
-                  {person.name + " |"}
+                <h1 className="text-2xl md:text-5xl font-bold mb-4">
+                  {person.name}
                 </h1>
-                <span className="text-lg md:text-xl font-bold text-info-content mb-4">
+                <span className="px-2 md:px-4 text-2xl md:text-4xl">|</span>
+                <span className="text-base md:text-xl font-bold font-mono mb-4">
                   {person.known_for_department}
                 </span>
               </div>
@@ -116,15 +117,15 @@ export default function Person() {
                 <time dateTime="2020-03-16" className="text-base font-mono">
                   {person.birthday}
                   {(person.deathday && " - " + person.deathday) || (
-                    <span className="text-base-content pr-2"> - Present</span>
+                    <span className="pr-2"> - Present</span>
                   )}
                 </time>
-                <span className="text-base font-mono font-bold text-base-content">
+                <span className="text-base font-mono font-bold">
                   {"| " + gender[person.gender - 1]}
                 </span>
               </div>
               <div className="flex flex-row">
-                <span className="text-base font-mono font-bold text-base-content">
+                <span className="text-base font-mono font-bold">
                   {person.place_of_birth}
                 </span>
               </div>
