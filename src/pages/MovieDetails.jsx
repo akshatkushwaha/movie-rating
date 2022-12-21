@@ -97,8 +97,8 @@ export default function MovieDetails() {
     return (
       <>
         <div className="w-full pt-12 bg-base-300">
-          <div className="movie-details mt-16 flex flex-row flex-wrap container mx-auto px-8 py-20 justify-around top-0 bg-gray-900 rounded-xl">
-            <div className="movie-details__poster w-fit h-fit overflow-hidden rounded-lg mx-5 flex flex-col">
+          <div className="movie-details mt-16 flex flex-row flex-wrap container mx-auto md:px-8 py-5 md:py-20 justify-around bg-gray-900 rounded-xl">
+            <div className="movie-details__poster w-fit h-fit overflow-hidden rounded-lg md:mx-5 flex flex-col">
               <img
                 src={
                   movie.poster_path
@@ -108,34 +108,38 @@ export default function MovieDetails() {
                 alt={movie.title}
               />
             </div>
-            <div className="movie-details__info w-2/3 text-gray-100">
-              <h1 className="text-5xl font-bold ">{movie.title}</h1>
+            <div className="movie-details__info mt-4 md:mt-0 mx-4 md:mx-0 md:w-2/3 text-gray-100">
+              <h1 className="text-3xl md:text-5xl font-bold text-center md:text-left">
+                {movie.title}
+              </h1>
               <div className="py-2">
-                <div className="py-2">
-                  <span className="inline-block py-1 text-base font-mono font-semibold mr-2">
+                <div className="">
+                  <h1 className="py-1 text-sm md:text-base text-center md:text-left font-mono font-semibold mr-2">
                     {movie.runtime} min | {movie.release_date}
-                  </span>
+                  </h1>
                 </div>
-                <div className="pt-2">
+                <div className="">
                   {genreList?.map((genre) => (
                     <Link key={genre.id} to={`/genre/${genre.id}`}>
-                      <span className="inline-block py-1 text-base font-mono font-semibold mr-2">
+                      <h1 className="inline-block text-sm md:text-base font-mono font-semibold mr-2">
                         {genre.name} |
-                      </span>
+                      </h1>
                     </Link>
                   ))}
                 </div>
               </div>
               {movie.homepage && (
-                <div className="flex flex-row flex-wrap items-end my-2">
-                  <h1 className="text-xl font-bold">Watch at: </h1>
+                <div className="flex flex-row flex-wrap items-end">
+                  <h1 className="text-lg md:text-xl font-bold">Watch at: </h1>
                   <a href={movie.homepage} target="_blank" className="pl-5 ">
                     Streaming Service
                   </a>
                 </div>
               )}
-              <div className="flex flex-row flex-wrap items-end my-2">
-                <h1 className="text-xl font-bold">External Links: </h1>
+              <div className="flex flex-row flex-wrap items-end">
+                <h1 className="text-lg md:text-xl font-bold">
+                  External Links:{" "}
+                </h1>
                 {externalIds.imdb_id && (
                   <a
                     href={`https://www.imdb.com/title/${externalIds.imdb_id}`}
@@ -144,23 +148,23 @@ export default function MovieDetails() {
                   >
                     <img
                       src="https://img.icons8.com/color/48/000000/imdb.png"
-                      className="h-10 bottom-0"
+                      className="h-10 item-end"
                     />
                   </a>
                 )}
               </div>
               <div className="movie-details__overview container py-4">
                 <h1 className="text-3xl font-bold">Overview</h1>
-                <p className="text-lg py-4">{movie.overview}</p>
+                <p className="text-lg py-4 text-justify">{movie.overview}</p>
               </div>
             </div>
           </div>
-          <div className="movie-details__cast container mx-auto px-10">
-            <h1 className="text-3xl font-bold p-10">Cast</h1>
+          <div className="movie-details__cast container mx-auto">
+            <h1 className="text-3xl font-bold p-4 md:p-10">Cast</h1>
             <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">
               {cast.map((cast) => (
                 <Link key={cast.id} to={`/person/${cast.id}`}>
-                  <div className="flex flex-col items-start m-5">
+                  <div className="flex flex-col items-start mx-5">
                     <div className="movie-details__cast__scroll__image w-32 overflow-hidden rounded-lg">
                       <img
                         src={
@@ -182,8 +186,8 @@ export default function MovieDetails() {
             </div>
           </div>
           {/* Similar Movies */}
-          <div className="movie-details__recommended container mx-auto px-10 bg-base-300">
-            <h1 className="text-3xl font-bold py-8">Similar</h1>
+          <div className="movie-details__recommended container mx-auto bg-base-300">
+            <h1 className="text-3xl font-bold p-4 md:p-10">Similar</h1>
             <div className="movie-details__recommended__scroll flex flex-row flex-nowrap">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {similar.map.length > 0 ? (

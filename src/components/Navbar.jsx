@@ -23,6 +23,7 @@ export default function Navbar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+
   const themes = [
     "light",
     "dark",
@@ -87,14 +88,12 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <Link to="/">
-                    <div className="block lg:hidden h-8 w-auto font-sans font-bold text-lg">
-                      Movie Rating
-                    </div>
-                    <div className="hidden lg:block h-8 w-auto font-sans font-extrabold text-xl">
-                      Movie Rating
-                    </div>
-                  </Link>
+                  <div className="hidden lg:hidden h-8 w-auto font-sans font-bold text-lg">
+                    Movie Rating
+                  </div>
+                  <div className="hidden lg:block h-8 w-auto font-sans font-extrabold text-xl">
+                    Movie Rating
+                  </div>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -119,8 +118,8 @@ export default function Navbar() {
                   </div>
                 </div>
               </div>
-              <div className="w-96 flex items-center justify-end sm:items-stretch sm:justify-start ">
-                <div className="w-full hidden sm:ml-6 sm:block ">
+              <div className="w-96 flex items-center justify-end md:items-stretch md:justify-start ">
+                <div className="w-full hidden md:block ">
                   <div className="w-full flex space-x-4 ">
                     <div className="w-full relative">
                       <input
@@ -128,7 +127,7 @@ export default function Navbar() {
                         name="search"
                         id="search"
                         placeholder="Search"
-                        className="bg-base-100 text-base-content rounded-md border-none block pl-6 pr-3 py-2 w-full sm:text-sm border-base-300"
+                        className="bg-base-100 text-base-content rounded-md border-none block pl-6 pr-3 py-2 w-full md:text-sm border-base-300"
                         onChange={(e) => handleSearch(e.target.value)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
@@ -259,7 +258,7 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-              <div className="dropdown dropdown-hover">
+              <div className="hidden lg:block dropdown dropdown-hover">
                 <label tabIndex={0} className="btn m-1">
                   Theme
                 </label>
@@ -282,6 +281,25 @@ export default function Navbar() {
           </div>
 
           <Disclosure.Panel className="sm:hidden">
+            <div className="block lg:hidden dropdown dropdown-hover w-fit">
+              <label tabIndex={0} className="btn m-1">
+                Theme
+              </label>
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu p-1 shadow bg-base-100 rounded-box w-52 overflow-auto"
+              >
+                {themes.map((theme) => {
+                  return (
+                    <li key={theme}>
+                      <option data-set-theme={theme}>
+                        {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                      </option>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
             <div className="space-y-1 px-2 pt-2 pb-3">
               {navigation.map((item) => {
                 const displayItem =
@@ -289,8 +307,8 @@ export default function Navbar() {
                 return (
                   <Disclosure.Button
                     key={item}
-                    as="Link"
-                    to={`/${item}/1`}
+                    as="a"
+                    href={`/${item}/1`}
                     className={classNames(
                       item === path
                         ? "bg-base-100 text-base-content"
@@ -305,6 +323,64 @@ export default function Navbar() {
               })}
             </div>
           </Disclosure.Panel>
+          <div className="mx-2 mb-4 flex items-center justify-end md:items-stretch md:justify-start ">
+            <div className="w-full block md:hidden ">
+              <div className="w-full flex space-x-4 ">
+                <div className="w-full relative">
+                  <input
+                    type="text"
+                    name="search"
+                    id="search"
+                    placeholder="Search"
+                    className="bg-base-100 text-base-content rounded-md border-none block pl-6 pr-3 py-2 w-full text-sm border-base-300"
+                    onChange={(e) => handleSearch(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        fullSearch();
+                      }
+                    }}
+                  />
+                  <MagnifyingGlassIcon
+                    className="absolute top-1/2 right-2 transform -translate-y-1/2 h-5 w-5 text-base-content"
+                    onClick={fullSearch}
+                  />
+                  {searchResults.length > 0 && (
+                    <div
+                      className="absolute w-full top-full left-0 rounded-md shadow-lg z-30 overflow-y-scroll"
+                      onClick={() => setSearchResults([])}
+                    >
+                      <div className="w-fit bg-base-100 rounded-md shadow-lg">
+                        {searchResults.map((result) => (
+                          <Link
+                            reloadDocument
+                            to={`${result.media_type}/${result.id}`}
+                            key={result.id}
+                            className="block px-4 py-2 text-base-content hover:bg-base-200"
+                          >
+                            <img
+                              src={
+                                result.poster_path
+                                  ? `https://image.tmdb.org/t/p/w500${result.poster_path}`
+                                  : result.profile_path
+                                  ? `https://image.tmdb.org/t/p/w500${result.profile_path}`
+                                  : "https://via.placeholder.com/500x750"
+                              }
+                              alt={result.title || result.name}
+                              className="w-10 h-10 rounded-md object-cover inline-block mr-2"
+                            />
+
+                            <span className="text-sm">
+                              {result.title || result.name}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         </>
       )}
     </Disclosure>

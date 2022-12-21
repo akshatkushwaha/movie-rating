@@ -179,19 +179,19 @@ export default function MoviesGrid() {
     return (
       <>
         <div className="flex flex-col items-center justify-center bg-base-300 text-base-content">
-          <div className="mt-16 container flex flex-row flex-wrap justify-center">
+          <div className="mt-24 md:mt-16 container flex flex-row flex-wrap justify-center">
             {movies.length > 0 ? (
               <div className="flex flex-row flex-wrap justify-center">
                 <h1 className="text-4xl font-bold text-center  p-4">{Title}</h1>
-                <div className="flex flex-row flex-wrap justify-between w-full pb-8 px-20">
-                  <p className="text-base font-bold text-center ">
+                <div className="flex flex-row flex-wrap justify-between w-full md:pb-8 px-4 md:px-20">
+                  <p className="text-sm md:text-base md:font-bold text-center ">
                     Page {currentPage} of {totalPages} Pages
                   </p>
-                  <p className="text-base font-bold text-center ">
+                  <p className="text-sm md:text-base md:font-bold text-center ">
                     Total Results: {totalResults}
                   </p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full p-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 w-full">
                   {movies.map((movie) => (
                     <MovieCard key={movie.id} {...movie} genreDB={genreDB} />
                   ))}
