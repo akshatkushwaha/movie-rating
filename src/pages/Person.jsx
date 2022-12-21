@@ -92,8 +92,8 @@ export default function Person() {
     return (
       <>
         <div className="w-full pt-12 bg-base-300">
-          <div className="mt-16 container flex flex-row justify-around py-10 px-8 mx-auto rounded-2xl bg-gray-900">
-            <div className="flex flex-col w-1/4 rounded-lg overflow-hidden">
+          <div className="mt-16 container flex flex-row flex-wrap justify-around py-8 px-8 mx-auto rounded-2xl bg-gray-900">
+            <div className="flex flex-col md:w-1/4 rounded-lg overflow-hidden">
               <img
                 src={
                   person.profile_path
@@ -103,34 +103,36 @@ export default function Person() {
                 alt={person.name}
               />
             </div>
-            <div className="flex flex-col w-2/3">
-              <div className="flex flex-row">
-                <h1 className="text-5xl font-bold text-base-content mb-4">
+            <div className="flex flex-col py-4 md:py-0 md:w-2/3">
+              <div className="flex flex-row flex-wrap item-end">
+                <h1 className="text-2xl md:text-5xl font-bold text-base-content mb-4">
                   {person.name + " |"}
                 </h1>
-                <span className="text-xl font-bold text-info-content pt-7 mb-4">
+                <span className="text-lg md:text-xl font-bold text-info-content mb-4">
                   {person.known_for_department}
                 </span>
               </div>
-              <div className="flex flex-row">
-                <time dateTime="2020-03-16" className="text-lg font-mono">
+              <div className="flex flex-row flex-wrap">
+                <time dateTime="2020-03-16" className="text-base font-mono">
                   {person.birthday}
                   {(person.deathday && " - " + person.deathday) || (
                     <span className="text-base-content pr-2"> - Present</span>
                   )}
                 </time>
-                <span className="text-lg font-mono font-bold text-base-content">
+                <span className="text-base font-mono font-bold text-base-content">
                   {"| " + gender[person.gender - 1]}
                 </span>
               </div>
               <div className="flex flex-row">
-                <span className="text-lg font-mono font-bold text-base-content">
+                <span className="text-base font-mono font-bold text-base-content">
                   {person.place_of_birth}
                 </span>
               </div>
-              <p className="text-lg text-justify pt-4">{person.biography}</p>
+              <p className="text-base md:text-lg text-justify pt-2 indent-10">
+                {person.biography}
+              </p>
               {/* External Links */}
-              <div className="flex flex-row pt-4">
+              <div className="flex flex-row flex-wrap justify-between md:justify-start pt-4">
                 {externalIds?.imdb_id && (
                   <a
                     href={`https://www.imdb.com/name/${externalIds.imdb_id}`}
@@ -182,8 +184,8 @@ export default function Person() {
               </div>
             </div>
           </div>
-          <div className="container mx-auto px-10 bg-base-300">
-            <h1 className="text-3xl font-bold py-8">Known for</h1>
+          <div className="container mx-auto md:px-10 bg-base-300">
+            <h1 className="text-3xl font-bold p-4 md:py-8">Known for</h1>
             {/* <div className="flex flex-row flex-wrap justify-center"> */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {combinedCredits?.cast?.map((movie) => (
