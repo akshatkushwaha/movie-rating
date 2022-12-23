@@ -172,7 +172,7 @@ export default function MovieDetails() {
             <div className="movie-details__cast container mx-auto">
               <h1 className="text-3xl font-bold p-4 md:p-10">Videos</h1>
               <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">
-                {videos.map((video) => (
+                {videos.reverse().map((video) => (
                   <Link
                     key={video.id}
                     onClick={() => {
