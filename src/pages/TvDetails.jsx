@@ -54,8 +54,8 @@ export default function TvDetails() {
   } else
     return (
       <>
-        <div className="w-full pt-12 bg-base-300">
-          <div className="movie-details mt-16 flex flex-row flex-wrap container mx-auto px-8 py-20 justify-around top-0 bg-gray-900 rounded-xl">
+        <div className="w-full bg-base-300">
+          <div className="movie-details flex flex-row flex-wrap container mx-auto px-8 py-20 justify-around top-0 bg-gray-900 rounded-xl">
             <div className="movie-details__poster w-fit h-fit overflow-hidden rounded-lg mx-5 flex flex-col">
               <img
                 src={

@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
+import { ArrowUpCircleIcon } from "@heroicons/react/24/outline";
+
 import Navbar from "./components/Navbar";
 import MoviesGrid from "./pages/MoviesGrid";
 import MovieDetails from "./pages/MovieDetails";
@@ -25,6 +27,13 @@ export default function App() {
         <Route path="/genre/:id/:page" element={<GenreGrid />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+      <div className="fixed bottom-2 left-2 rounded-full bg-accent">
+        <div className="goto-top flex justify-center items-center">
+          <a href="#top">
+            <ArrowUpCircleIcon className="h-10 w-10 text-accent-content z-30" />
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

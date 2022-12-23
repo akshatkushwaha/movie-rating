@@ -132,7 +132,7 @@ export default function GenreGrid() {
     return (
       <>
         <div className="flex flex-col items-center justify-center bg-base-300 text-base-content">
-          <div className="mt-24 md:mt-16 container flex flex-row flex-wrap justify-center">
+          <div className="container flex flex-row flex-wrap justify-center">
             {movies.length > 0 ? (
               <div className="flex flex-row flex-wrap justify-center">
                 <h1 className="text-4xl font-bold text-center  p-4">{title}</h1>

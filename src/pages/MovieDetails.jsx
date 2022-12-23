@@ -105,8 +105,8 @@ export default function MovieDetails() {
   else
     return (
       <>
-        <div className="w-full pt-12 bg-base-300">
-          <div className="movie-details mt-16 flex flex-row flex-wrap container mx-auto md:px-8 py-5 md:py-20 justify-around bg-gray-900 rounded-xl">
+        <div className="w-full bg-base-300">
+          <div className="movie-details flex flex-row flex-wrap container mx-auto md:px-8 py-5 md:py-20 justify-around bg-gray-900 rounded-xl">
             <div className="movie-details__poster w-fit h-fit overflow-hidden rounded-lg md:mx-5 flex flex-col">
               <img
                 src={
@@ -189,9 +189,8 @@ export default function MovieDetails() {
                           alt={video.name}
                         />
                       </div>
-                      <span className="text-base font-bold">{video.name}</span>
-                      <span className="text-base font-mono">
-                        {video.character}
+                      <span className="text-base font-bold line-clamp-2 w-32">
+                        {video.name}
                       </span>
                     </div>
                   </Link>
@@ -203,7 +202,7 @@ export default function MovieDetails() {
             <h1 className="text-3xl font-bold p-4 md:p-10">Cast</h1>
             <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">
               {cast.map((cast) => (
-                <Link key={cast.id} to={`/person/${cast.id}`}>
+                <Link key={cast.id} reloadDocument to={`/person/${cast.id}`}>
                   <div className="flex flex-col items-start mx-5">
                     <div className="movie-details__cast__scroll__image w-32 overflow-hidden rounded-lg">
                       <img
@@ -216,10 +215,13 @@ export default function MovieDetails() {
                         alt={cast.name}
                       />
                     </div>
-                    <span className="text-base font-bold">{cast.name}</span>
-                    <span className="text-base font-mono">
-                      {cast.character}
-                    </span>
+                    <div className="flex flex-col w-32 line-clamp-4">
+                      <span className="text-base font-bold">{cast.name}</span>
+                      <br />
+                      <span className="text-base font-mono">
+                        {cast.character}
+                      </span>
+                    </div>
                   </div>
                 </Link>
               ))}

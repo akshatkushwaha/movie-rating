@@ -91,8 +91,8 @@ export default function Person() {
   } else
     return (
       <>
-        <div className="w-full pt-12 bg-base-300">
-          <div className="mt-16 container flex flex-row flex-wrap justify-around py-8 px-8 mx-auto rounded-2xl bg-neutral">
+        <div className="w-full bg-base-300">
+          <div className="container flex flex-row flex-wrap justify-around py-8 px-8 mx-auto rounded-2xl bg-neutral">
             <div className="flex flex-col md:w-1/4 rounded-lg overflow-hidden">
               <img
                 src={
