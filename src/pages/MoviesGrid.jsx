@@ -206,20 +206,20 @@ export default function MoviesGrid() {
           <div className="container flex flex-row justify-center text-primary-content my-10">
             <button
               className={
-                "p-4 mx-4 rounded bg-primary hover:bg-primary-focus" +
+                "p-2 mx-1 md:p-4 md:mx-4 rounded bg-primary hover:bg-primary-focus" +
                 prevButtonClass
               }
               onClick={() => {
                 navigation(`/${path}/${currentPage - 1}`);
               }}
             >
-              Previous
+              {"<"}
             </button>
             <div className="flex flex-row justify-center">
               {pageNumbers.map((number) => (
                 <button
                   key={number}
-                  className="h-14 w-14 mx-4 rounded bg-primary hover:bg-primary-focus"
+                  className="mx-1 p-2 md:h-14 md:w-14 md:mx-4 rounded bg-primary hover:bg-primary-focus"
                   onClick={() => {
                     navigation(`/${path}/${number}`);
                   }}
@@ -230,14 +230,14 @@ export default function MoviesGrid() {
             </div>
             <button
               className={
-                "p-4 mx-4 rounded bg-primary hover:bg-primary-focus" +
+                "p-2 mx-1 md:p-4 md:mx-4 rounded bg-primary hover:bg-primary-focus" +
                 nextButtonClass
               }
               onClick={() => {
                 navigation(`/${path}/${currentPage + 1}`);
               }}
             >
-              Next
+              {">"}
             </button>
           </div>
         </div>

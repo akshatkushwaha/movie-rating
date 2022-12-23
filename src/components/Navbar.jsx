@@ -297,7 +297,7 @@ export default function Navbar() {
               </label>
               <ul
                 tabIndex={0}
-                className="dropdown-content menu p-1 shadow bg-base-100 rounded-box w-[50vw] overflow-auto leading-6 h-[50vh]"
+                className="dropdown-content menu flex-nowrap p-1 shadow bg-base-100 rounded-box leading-6 h-[50vh] overflow-auto"
               >
                 {themes.map((theme) => {
                   return (
@@ -359,7 +359,7 @@ export default function Navbar() {
                       className="absolute w-full top-full left-0 rounded-md shadow-lg z-30 overflow-y-scroll"
                       onClick={() => setSearchResults([])}
                     >
-                      <div className="w-fit bg-base-100 rounded-md shadow-lg">
+                      <div className="w-fit h-[50vh] bg-base-100 rounded-md shadow-lg overflow-auto">
                         {searchResults.map((result) => (
                           <Link
                             reloadDocument
