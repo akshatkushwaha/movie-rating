@@ -9,6 +9,8 @@ import {
   getSimilarMovies,
   getMovieExternalIds,
   getMovieVideos,
+  getMovieImages,
+  getMovieReviews,
 } from "../api/movies";
 import { Link, useParams } from "react-router-dom";
 
@@ -22,6 +24,8 @@ export default function MovieDetails() {
   const [genreList, setGenreList] = useState([]);
   const [externalIds, setExternalIds] = useState({});
   const [videos, setVideos] = useState([]);
+  const [images, setImages] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     fetchGenresDB();
@@ -30,6 +34,7 @@ export default function MovieDetails() {
     fetchSimilarMovies();
     fetchMovieExternalIds();
     fetchMovieVideos();
+    fetchMovieImages();
 
     genrateGenreList();
   }, [id]);
@@ -72,8 +77,12 @@ export default function MovieDetails() {
 
   const fetchMovieVideos = async () => {
     const movieVideos = await getMovieVideos(id);
-    console.log(movieVideos.data.results);
     setVideos(movieVideos.data.results);
+  };
+
+  const fetchMovieImages = async () => {
+    const movieImages = await getMovieImages(id);
+    setImages(movieImages.data.backdrops);
   };
 
   if (loading)
@@ -182,7 +191,7 @@ export default function MovieDetails() {
                       );
                     }}
                   >
-                    <div className="flex flex-col items-start mx-5">
+                    <div className="flex flex-col items-start mx-2 md:mx-3">
                       <div className="movie-details_videos w-32 overflow-hidden rounded-lg">
                         <img
                           src={`https://img.youtube.com/vi/${video.key}/0.jpg`}
@@ -198,12 +207,37 @@ export default function MovieDetails() {
               </div>
             </div>
           )}
+          {images.length > 0 && (
+            <div className="movie-details__cast container mx-auto">
+              <h1 className="text-3xl font-bold p-4 md:p-10">Images</h1>
+              <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">
+                {images.map((image) => (
+                  <Link
+                    key={image.id}
+                    onClick={() => {
+                      window.open(
+                        `https://image.tmdb.org/t/p/original${image.file_path}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <div className="movie-details_videos w-72 md:w-96 mx-2 md:mx-5 overflow-hidden rounded-lg">
+                      <img
+                        src={`https://image.tmdb.org/t/p/w500${image.file_path}`}
+                        alt={image.name}
+                      />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="movie-details__cast container mx-auto">
             <h1 className="text-3xl font-bold p-4 md:p-10">Cast</h1>
             <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">
               {cast.map((cast) => (
                 <Link key={cast.id} reloadDocument to={`/person/${cast.id}`}>
-                  <div className="flex flex-col items-start mx-5">
+                  <div className="flex flex-col items-start mx-2 md:mx-3">
                     <div className="movie-details__cast__scroll__image w-32 overflow-hidden rounded-lg">
                       <img
                         src={

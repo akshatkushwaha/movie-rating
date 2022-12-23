@@ -111,6 +111,20 @@ const getMovieVideos = async (id) =>
     },
   });
 
+const getMovieImages = async (id) =>
+  await axios.get(BASE_URL + "/movie/" + id + "/images", {
+    params: {
+      api_key: api_key,
+    },
+  });
+
+const getMovieReviews = async (id) =>
+  await axios.get(BASE_URL + "/movie/" + id + "/reviews", {
+    params: {
+      api_key: api_key,
+    },
+  });
+
 export {
   getPopularMovies,
   getMovie,
@@ -126,4 +140,6 @@ export {
   getMovieExternalIds,
   getMoviesByGenre,
   getMovieVideos,
+  getMovieImages,
+  getMovieReviews,
 };
