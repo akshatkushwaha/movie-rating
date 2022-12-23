@@ -8,7 +8,7 @@ export default function PageNotFound() {
     <div className="h-screen w-full flex flex-col justify-center bg-base-300">
       {path === "" ? (
         <div className="flex flex-col items-center">
-          <h1 className="text-4xl font-bold text-white m-6">
+          <h1 className="text-center text-4xl font-bold text-white m-6">
             Home page is under construction.
           </h1>
           <Link to="/popular/1">

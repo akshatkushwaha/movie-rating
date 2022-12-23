@@ -8,6 +8,7 @@ import {
   getMovieDetails,
   getSimilarMovies,
   getMovieExternalIds,
+  getMovieVideos,
 } from "../api/movies";
 import { Link, useParams } from "react-router-dom";
 
@@ -20,6 +21,7 @@ export default function MovieDetails() {
   const [genreDB, setGenreDB] = useState([]);
   const [genreList, setGenreList] = useState([]);
   const [externalIds, setExternalIds] = useState({});
+  const [videos, setVideos] = useState([]);
 
   useEffect(() => {
     fetchGenresDB();
@@ -27,6 +29,7 @@ export default function MovieDetails() {
     fetchMovieDetails();
     fetchSimilarMovies();
     fetchMovieExternalIds();
+    fetchMovieVideos();
 
     genrateGenreList();
   }, [id]);
@@ -65,6 +68,12 @@ export default function MovieDetails() {
   const fetchMovieExternalIds = async () => {
     const movieExternalIds = await getMovieExternalIds(id);
     setExternalIds(movieExternalIds.data);
+  };
+
+  const fetchMovieVideos = async () => {
+    const movieVideos = await getMovieVideos(id);
+    console.log(movieVideos.data.results);
+    setVideos(movieVideos.data.results);
   };
 
   if (loading)
@@ -159,6 +168,37 @@ export default function MovieDetails() {
               </div>
             </div>
           </div>
+          {videos.length > 0 && (
+            <div className="movie-details__cast container mx-auto">
+              <h1 className="text-3xl font-bold p-4 md:p-10">Videos</h1>
+              <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">
+                {videos.map((video) => (
+                  <Link
+                    key={video.id}
+                    onClick={() => {
+                      window.open(
+                        `https://www.youtube.com/watch?v=${video.key}`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    <div className="flex flex-col items-start mx-5">
+                      <div className="movie-details_videos w-32 overflow-hidden rounded-lg">
+                        <img
+                          src={`https://img.youtube.com/vi/${video.key}/0.jpg`}
+                          alt={video.name}
+                        />
+                      </div>
+                      <span className="text-base font-bold">{video.name}</span>
+                      <span className="text-base font-mono">
+                        {video.character}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="movie-details__cast container mx-auto">
             <h1 className="text-3xl font-bold p-4 md:p-10">Cast</h1>
             <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">

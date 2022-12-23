@@ -104,6 +104,13 @@ const getMoviesByGenre = async (genreId, page) =>
     },
   });
 
+const getMovieVideos = async (id) =>
+  await axios.get(BASE_URL + "/movie/" + id + "/videos", {
+    params: {
+      api_key: api_key,
+    },
+  });
+
 export {
   getPopularMovies,
   getMovie,
@@ -118,4 +125,5 @@ export {
   getMovieUsingQuery,
   getMovieExternalIds,
   getMoviesByGenre,
+  getMovieVideos,
 };
