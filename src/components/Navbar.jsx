@@ -75,16 +75,16 @@ export default function Navbar() {
   return (
     <Disclosure
       as="nav"
-      className={classNames(
-        scrollDirection === "down" ? "hidden" : "block",
-        "bg-base-300 pb-1 md:pb-0 sticky top-0 w-full z-30"
-      )}
-      id="navbar"
+      // className={classNames(
+      //   scrollDirection === "down" ? "hidden" : "block",
+      //   "bg-base-300 pb-1 md:pb-0 sticky top-0 w-full z-30 transition transform duration-300 ease-in-out"
+      // )}
+      className="bg-base-300 pb-1 md:pb-0 sticky top-0 w-full z-30"
     >
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl">
-            <div className="relative flex h-16 items-center justify-between">
+            <div className="relative flex h-10 md:h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
                 <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-base-content hover:bg-base-200 hover:text-white">
@@ -256,12 +256,12 @@ export default function Navbar() {
                 ) : (
                   <div className="flex flex-row">
                     <Link to="/login">
-                      <div className="px-3 py-2 m-2 rounded-md text-sm font-medium text-accent-content bg-accent hover:bg-accent-focus">
+                      <div className="px-3 py-1 md:py-2 m-2 rounded-md text-sm font-medium text-accent-content bg-accent hover:bg-accent-focus">
                         Login
                       </div>
                     </Link>
                     <Link to="/register">
-                      <div className="px-3 py-2 m-2 rounded-md text-sm font-medium text-primary-content bg-primary hover:bg-primary-focus">
+                      <div className="px-3 py-1 md:py-2 m-2 rounded-md text-sm font-medium text-primary-content bg-primary hover:bg-primary-focus">
                         Register
                       </div>
                     </Link>
@@ -297,7 +297,7 @@ export default function Navbar() {
               </label>
               <ul
                 tabIndex={0}
-                className="dropdown-content menu p-1 shadow bg-base-100 rounded-box w-52 overflow-auto"
+                className="dropdown-content menu p-1 shadow bg-base-100 rounded-box w-[50vw] overflow-auto leading-6 h-[50vh]"
               >
                 {themes.map((theme) => {
                   return (
@@ -333,7 +333,7 @@ export default function Navbar() {
               })}
             </div>
           </Disclosure.Panel>
-          <div className="px-2 pb-4 flex items-center justify-end md:items-stretch md:justify-start ">
+          <div className="px-2 pb-2 flex items-center justify-end md:items-stretch md:justify-start ">
             <div className="w-full block md:hidden ">
               <div className="w-full flex space-x-4 ">
                 <div className="w-full relative">
