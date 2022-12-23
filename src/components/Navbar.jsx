@@ -10,6 +10,8 @@ import {
 import { Link } from "react-router-dom";
 import { themeChange } from "theme-change";
 
+import { useScrollDirection } from "../hooks/useScrollDirection";
+
 import { getMovieUsingQuery } from "../api/movies";
 
 const navigation = ["popular", "toprated", "upcoming", "nowplaying"];
@@ -19,6 +21,7 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+  const scrollDirection = useScrollDirection();
   const path = window.location.pathname.split("/")[1];
   const [loggedIn, setLoggedIn] = useState(false);
   const [search, setSearch] = useState("");
@@ -70,7 +73,14 @@ export default function Navbar() {
   };
 
   return (
-    <Disclosure as="nav" className="bg-base-300 fixed w-full z-30">
+    <Disclosure
+      as="nav"
+      className={classNames(
+        scrollDirection === "down" ? "hidden" : "block",
+        "bg-base-300 pb-1 md:pb-0 sticky top-0 w-full z-30"
+      )}
+      id="navbar"
+    >
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl">
@@ -323,7 +333,7 @@ export default function Navbar() {
               })}
             </div>
           </Disclosure.Panel>
-          <div className="mx-2 mb-4 flex items-center justify-end md:items-stretch md:justify-start ">
+          <div className="px-2 pb-4 flex items-center justify-end md:items-stretch md:justify-start ">
             <div className="w-full block md:hidden ">
               <div className="w-full flex space-x-4 ">
                 <div className="w-full relative">
