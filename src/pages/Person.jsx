@@ -188,7 +188,7 @@ export default function Person() {
           <div className="container mx-auto md:px-10 bg-base-300">
             <h1 className="text-3xl font-bold p-4 md:py-8">Known for</h1>
             {/* <div className="flex flex-row flex-wrap justify-center"> */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-2">
               {combinedCredits?.cast?.map((movie) => (
                 <MovieCard key={movie.id} {...movie} genreDB={genreDB} />
               ))}

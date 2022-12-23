@@ -144,7 +144,7 @@ export default function GenreGrid() {
                     Total Results: {totalResults}
                   </p>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full p-4">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-2">
                   {movies.map((movie) => (
                     <MovieCard key={movie.id} {...movie} genreDB={genreDB} />
                   ))}

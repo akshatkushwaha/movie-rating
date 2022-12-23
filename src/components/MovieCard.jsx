@@ -18,7 +18,7 @@ export default function MovieCard(props) {
 
   return (
     <>
-      <div className="rounded overflow-hidden shadow-base-200 shadow-2xl transform transition duration-500 hover:scale-110 bg-base-100">
+      <div className="rounded overflow-hidden shadow-base-200 shadow-2xl transform transition duration-500 md:hover:scale-110 bg-base-100">
         <Link reloadDocument to={`/movie/${props.id}`}>
           <div className="w-full rounded overflow-hidden">
             <img
@@ -46,7 +46,7 @@ export default function MovieCard(props) {
             <div className="movie_card_genre my-2 flex flex-row overflow-x-scroll">
               {props.genre_ids?.map((id) => (
                 <Link reloadDocument key={id} to={`/genre/${id}/1`}>
-                  <span className="bg-neutral text-neutral-content inline-block rounded-full px-2 py-1 mr-2 text-xs md:text-sm font-normal md:font-semibold">
+                  <span className="bg-neutral text-neutral-content inline-block rounded-full px-2 py-1 mr-2 text-xs md:text-sm font-normal md:font-semibold truncate">
                     {props.genreDB?.find((genre) => genre.id === id)?.name}
                   </span>
                 </Link>

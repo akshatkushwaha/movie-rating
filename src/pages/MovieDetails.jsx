@@ -231,7 +231,7 @@ export default function MovieDetails() {
           <div className="movie-details__recommended container mx-auto bg-base-300">
             <h1 className="text-3xl font-bold p-4 md:p-10">Similar</h1>
             <div className="movie-details__recommended__scroll flex flex-row flex-nowrap">
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-2">
                 {similar.map.length > 0 ? (
                   similar.map((movie) => (
                     <MovieCard key={movie.id} {...movie} genreDB={genreDB} />
