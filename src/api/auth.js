@@ -11,7 +11,7 @@ const getRequestToken = async () => {
   return response;
 };
 
-const createSession = async (request_token) => {
+const getSessionId = async (request_token) => {
   const response = await axios.post(
     `${BASE_URL}/authentication/session/new?api_key=${api_key}`,
     { request_token }
@@ -31,4 +31,4 @@ const createSessionWithLogin = async (username, password, request_token) => {
   return response;
 };
 
-export { getRequestToken, createSession, createSessionWithLogin };
+export { getRequestToken, getSessionId, createSessionWithLogin };

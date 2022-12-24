@@ -3,6 +3,22 @@ import { Link } from "react-router-dom";
 
 export default function MovieCard(props) {
   const genre_ids = props.genre_ids;
+  const year = props.release_date?.slice(0, 4);
+  const month = props.release_date?.slice(5, 7);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   useEffect(() => {
     trimGeners(genre_ids);
@@ -30,17 +46,19 @@ export default function MovieCard(props) {
               }
               alt={props.title}
             />
+            <div className="absolute top-0 right-0 m-2">
+              <span className="bg-info text-info-content inline-block rounded-full px-2 py-1 text-xs md:text-base font-normal md:font-semibold">
+                {props.vote_average}
+              </span>
+            </div>
           </div>
           <div className="py-2 px-4">
             <h1 className="text-base md:text-xl font-bold pb-2">
               {props.title}
             </h1>
             <div className="text-neutral-content">
-              <span className="bg-neutral inline-block rounded-full px-3 py-1 mr-2 text-xs md:text-sm font-normal md:font-semibold">
-                {props.vote_average}
-              </span>
-              <span className="bg-neutral inline-block rounded-full px-3 py-1 text-xs md:text-sm font-normal md:font-semibold">
-                {props.release_date}
+              <span className="text-xs md:text-sm font-normal md:font-semibold">
+                {year + " " + months[month - 1]}
               </span>
             </div>
             <div className="movie_card_genre my-2 flex flex-row overflow-x-scroll">
