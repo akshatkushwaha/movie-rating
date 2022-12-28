@@ -116,12 +116,12 @@ export default function MovieDetails() {
       <>
         <div className="w-full bg-base-300">
           <div className="movie-details flex flex-row flex-wrap container mx-auto md:px-8 py-5 md:py-20 justify-around bg-gray-900 rounded-xl">
-            <div className="movie-details__poster w-fit h-fit overflow-hidden rounded-lg md:mx-5 flex flex-col">
+            <div className="movie-details__poster px-10 md:w-1/4 overflow-hidden rounded-lg md:mx-5">
               <img
                 src={
                   movie.poster_path
-                    ? "https://image.tmdb.org/t/p/w300" + movie.poster_path
-                    : "https://via.placeholder.com/300x450"
+                    ? "https://image.tmdb.org/t/p/w500" + movie.poster_path
+                    : "https://via.placeholder.com/500x750"
                 }
                 alt={movie.title}
               />
@@ -132,7 +132,7 @@ export default function MovieDetails() {
               </h1>
               <div className="py-2">
                 <div className="">
-                  <h1 className="py-1 text-sm md:text-base text-center md:text-left font-mono font-semibold mr-2">
+                  <h1 className="py-1 text-sm md:text-base text-center md:text-left font-mono font-semibold">
                     {movie.runtime} min | {movie.release_date}
                   </h1>
                 </div>
@@ -263,24 +263,32 @@ export default function MovieDetails() {
           </div>
           {/* Similar Movies */}
           <div className="movie-details__recommended container mx-auto bg-base-300">
-            <h1 className="text-3xl font-bold p-4 md:p-10">Similar</h1>
-            <div className="movie-details__recommended__scroll flex flex-row flex-nowrap">
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-2">
-                {similar.map.length > 0 ? (
-                  similar.map((movie) => (
-                    <MovieCard key={movie.id} {...movie} genreDB={genreDB} />
-                  ))
-                ) : (
-                  <div className="flex flex-col items-center justify-center">
-                    <h1 className="text-3xl font-bold">
-                      No Similar Movies Found
-                    </h1>
-                    <h1 className="text-3xl font-bold">
-                      Try Searching for a Movie
-                    </h1>
+            <h1 className="text-3xl font-bold p-4 md:p-10">Similar Movies</h1>
+            <div className="movie-details__recommended__scroll flex flex-row flex-nowrap overflow-x-auto">
+              {similar?.map((movie) => (
+                <Link key={movie.id} to={`/movie/${movie.id}`}>
+                  <div className="flex flex-col items-start mx-2 md:mx-3">
+                    <div className="movie-details__recommended__scroll__image w-32 overflow-hidden rounded-lg">
+                      <img
+                        src={
+                          movie.poster_path !== null
+                            ? "https://image.tmdb.org/t/p/w300" +
+                              movie.poster_path
+                            : "https://via.placeholder.com/300x450"
+                        }
+                        alt={movie.title}
+                      />
+                    </div>
+                    <div className="flex flex-col w-32 line-clamp-4">
+                      <span className="text-base font-bold">{movie.title}</span>
+                      <br />
+                      <span className="text-base font-mono">
+                        {movie.release_date}
+                      </span>
+                    </div>
                   </div>
-                )}
-              </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>

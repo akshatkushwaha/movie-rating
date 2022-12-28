@@ -29,4 +29,38 @@ const getEpisodeGroups = async (id) => {
   return response;
 };
 
-export { getTvDetails, getTvCredits, getEpisodeGroups };
+const getTvVideos = async (id) => {
+  const response = await axios.get(BASE_URL + "/tv/" + id + "/videos", {
+    params: {
+      api_key: api_key,
+    },
+  });
+  return response;
+};
+
+const getTvImages = async (id) => {
+  const response = await axios.get(BASE_URL + "/tv/" + id + "/images", {
+    params: {
+      api_key: api_key,
+    },
+  });
+  return response;
+};
+
+const getSimilarTv = async (id) => {
+  const response = await axios.get(BASE_URL + "/tv/" + id + "/similar", {
+    params: {
+      api_key: api_key,
+    },
+  });
+  return response;
+};
+
+export {
+  getTvDetails,
+  getTvCredits,
+  getEpisodeGroups,
+  getTvVideos,
+  getTvImages,
+  getSimilarTv,
+};

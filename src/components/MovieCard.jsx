@@ -42,7 +42,7 @@ export default function MovieCard(props) {
               src={
                 props.poster_path
                   ? "https://image.tmdb.org/t/p/w300" + props.poster_path
-                  : "https://via.placeholder.com/300x450"
+                  : "https://via.placeholder.com/300x450?text=" + props.title
               }
               alt={props.title}
             />

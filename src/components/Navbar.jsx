@@ -72,6 +72,7 @@ export default function Navbar() {
       setAccountDetails(response);
     } else {
       localStorage.removeItem("session");
+      setLoggedIn(false);
     }
   };
 
@@ -192,9 +193,9 @@ export default function Navbar() {
                               <img
                                 src={
                                   result.poster_path
-                                    ? `https://image.tmdb.org/t/p/w500${result.poster_path}`
+                                    ? `https://image.tmdb.org/t/p/w300${result.poster_path}`
                                     : result.profile_path
-                                    ? `https://image.tmdb.org/t/p/w500${result.profile_path}`
+                                    ? `https://image.tmdb.org/t/p/w300${result.profile_path}`
                                     : "https://via.placeholder.com/500x750"
                                 }
                                 alt={result.title || result.name}
@@ -403,9 +404,9 @@ export default function Navbar() {
                             <img
                               src={
                                 result.poster_path
-                                  ? `https://image.tmdb.org/t/p/w500${result.poster_path}`
+                                  ? `https://image.tmdb.org/t/p/w300${result.poster_path}`
                                   : result.profile_path
-                                  ? `https://image.tmdb.org/t/p/w500${result.profile_path}`
+                                  ? `https://image.tmdb.org/t/p/w300${result.profile_path}`
                                   : "https://via.placeholder.com/500x750"
                               }
                               alt={result.title || result.name}
