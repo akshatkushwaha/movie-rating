@@ -7,9 +7,9 @@ import { getMoviesByGenre } from "../api/movies";
 
 export default function GenreGrid() {
   const navigation = useNavigate();
-  const genreId = window.location.pathname.split("/")[2];
+  const genreId = window.location.pathname.split("/")[3];
   const [title, setTitle] = useState("");
-  const currentPage = parseInt(window.location.pathname.split("/")[3]) || 1;
+  const currentPage = parseInt(window.location.pathname.split("/")[4]) || 1;
   const [movies, setMovies] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [totalResults, setTotalResults] = useState(0);
@@ -128,7 +128,7 @@ export default function GenreGrid() {
               </div>
             ) : (
               <div className="h-screen flex flex-col justify-center">
-                <h1 className="text-4xl font-bold">No Movies Found</h1>
+                <h1 className="text-4xl font-bold">No Data Found</h1>
               </div>
             )}
           </div>

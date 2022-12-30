@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, createContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import GenreDBContext from "../Context/GenreDBContext";
@@ -58,7 +58,7 @@ export default function Card(props) {
               <Link
                 reloadDocument
                 key={id}
-                to={props.title ? `movie/genre/${id}/1` : `tv/genre/${id}/1`}
+                to={props.title ? `/movie/genre/${id}/1` : `/tv/genre/${id}/1`}
               >
                 <span className="bg-neutral text-neutral-content inline-block rounded-full px-2 py-1 mr-2 text-xs md:text-sm font-normal md:font-semibold truncate">
                   {genreDB?.find((genre) => genre.id === id)?.name}
