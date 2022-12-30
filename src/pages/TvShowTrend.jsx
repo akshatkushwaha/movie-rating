@@ -1,33 +1,25 @@
 import React, { useState, useEffect } from "react";
 
-import MovieCard from "../components/MovieCard";
+import { useNavigation } from "react-router-dom";
 
-import { useNavigate } from "react-router-dom";
+import { getPopularTvShows, getOnAirTvShows } from "../api/tv";
 
-import {
-  getGenres,
-  getPopularMovies,
-  getTopRatedMovies,
-  getUpcomingMovies,
-  getNowPlayingMovies,
-} from "../api/movies";
+import Grid from "../components/Grid";
 
-export default function MoviesGrid() {
-  const navigation = useNavigate();
-  const path = window.location.pathname.split("/")[1];
+export default function TvShowTrend() {
+  const path = window.location.pathname.split("/")[2];
   const Title = path.charAt(0).toUpperCase() + path.slice(1);
-  const currentPage = parseInt(window.location.pathname.split("/")[2]) || 1;
-  const [movies, setMovies] = useState([]);
+  const currentPage = parseInt(window.location.pathname.split("/")[3]) || 1;
+  const [tvShows, setTvShows] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [totalResults, setTotalResults] = useState(0);
-  const [genreDB, setGenreDB] = useState([]);
   const [prevButtonClass, setPrevButtonClass] = useState("");
   const [nextButtonClass, setNextButtonClass] = useState("");
   const [loading, setLoading] = useState(true);
   const [pageNumbers, setPageNumbers] = useState([]);
 
   useEffect(() => {
-    fetchMovies();
+    fetchTvShows();
 
     if (currentPage === 1) {
       setPrevButtonClass("opacity-50 cursor-not-allowed disabled");
@@ -43,76 +35,39 @@ export default function MoviesGrid() {
 
     pageNumberGenerator();
 
-    document.title = `Movies | ${Title} | Page ${currentPage}`;
+    document.title = `TV Shows | ${Title} | Page ${currentPage}`;
   }, [currentPage, path]);
 
-  const fetchMovies = async () => {
+  const fetchTvShows = async () => {
     setLoading(true);
-    await getGenres()
-      .then((res) => {
-        setGenreDB(res.data.genres);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
 
-    if (path === "toprated") {
-      fetchTopRatedMovies();
-    } else if (path === "upcoming") {
-      fetchUpcomingMovies();
-    } else if (path === "nowplaying") {
-      fetchNowPlayingMovies();
+    if (path === "on_air") {
+      fetchOnAirTvShows();
     } else {
-      fetchPopularMovies();
+      fetchPopularTvShows();
     }
-
-    setTimeout(() => {
-      setLoading(false);
-    }, 400);
   };
 
-  const fetchPopularMovies = async () => {
-    await getPopularMovies(currentPage)
+  const fetchPopularTvShows = async () => {
+    await getPopularTvShows(currentPage)
       .then((res) => {
-        setMovies(res.data.results);
+        setTvShows(res.data.results);
         setTotalPages(res.data.total_pages);
         setTotalResults(res.data.total_results);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const fetchTopRatedMovies = async () => {
-    await getTopRatedMovies(currentPage)
+  const fetchOnAirTvShows = async () => {
+    await getOnAirTvShows(currentPage)
       .then((res) => {
-        setMovies(res.data.results);
+        setTvShows(res.data.results);
         setTotalPages(res.data.total_pages);
         setTotalResults(res.data.total_results);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchUpcomingMovies = async () => {
-    await getUpcomingMovies(currentPage)
-      .then((res) => {
-        setMovies(res.data.results);
-        setTotalPages(res.data.total_pages);
-        setTotalResults(res.data.total_results);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchNowPlayingMovies = async () => {
-    await getNowPlayingMovies(currentPage)
-      .then((res) => {
-        setMovies(res.data.results);
-        setTotalPages(res.data.total_pages);
-        setTotalResults(res.data.total_results);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -180,7 +135,7 @@ export default function MoviesGrid() {
       <>
         <div className="flex flex-col items-center justify-center bg-base-300 text-base-content">
           <div className="container flex flex-row flex-wrap justify-center">
-            {movies.length > 0 ? (
+            {tvShows.length > 0 ? (
               <div className="flex flex-row flex-wrap justify-center">
                 <h1 className="text-4xl font-bold text-center  p-4">{Title}</h1>
                 <div className="flex flex-row flex-wrap justify-between w-full md:pb-8 px-4 md:px-20">
@@ -191,15 +146,11 @@ export default function MoviesGrid() {
                     Total Results: {totalResults}
                   </p>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-2 py-4">
-                  {movies.map((movie) => (
-                    <MovieCard key={movie.id} {...movie} genreDB={genreDB} />
-                  ))}
-                </div>
+                <Grid tvShows={tvShows} />
               </div>
             ) : (
               <div className="h-screen flex flex-col justify-center">
-                <h1 className="text-4xl font-bold">No Movies Found</h1>
+                <h1 className="text-4xl font-bold">No tvShows Found</h1>
               </div>
             )}
           </div>
@@ -209,9 +160,6 @@ export default function MoviesGrid() {
                 "p-2 mx-1 md:p-4 md:mx-4 rounded bg-primary hover:bg-primary-focus" +
                 prevButtonClass
               }
-              onClick={() => {
-                navigation(`/${path}/${currentPage - 1}`);
-              }}
             >
               {"<"}
             </button>
@@ -220,9 +168,6 @@ export default function MoviesGrid() {
                 <button
                   key={number}
                   className="mx-1 p-2 md:h-14 md:w-14 md:mx-4 rounded bg-primary hover:bg-primary-focus"
-                  onClick={() => {
-                    navigation(`/${path}/${number}`);
-                  }}
                 >
                   {number}
                 </button>
@@ -233,9 +178,6 @@ export default function MoviesGrid() {
                 "p-2 mx-1 md:p-4 md:mx-4 rounded bg-primary hover:bg-primary-focus" +
                 nextButtonClass
               }
-              onClick={() => {
-                navigation(`/${path}/${currentPage + 1}`);
-              }}
             >
               {">"}
             </button>

@@ -11,9 +11,16 @@ export default function PageNotFound() {
           <h1 className="text-center text-4xl font-bold text-white m-6">
             Home page is under construction.
           </h1>
-          <Link to="/popular/1">
-            <button className="btn btn-primary">Go Popular Movies</button>
-          </Link>
+          <div className="flex flex-row">
+            <Link to="/movie/popular/1">
+              <button className="btn btn-primary m-2">Go Popular Movies</button>
+            </Link>
+            <Link to="/tv/popular/1">
+              <button className="btn btn-primary m-2">
+                Go Popular TV Shows
+              </button>
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="flex flex-col items-center">

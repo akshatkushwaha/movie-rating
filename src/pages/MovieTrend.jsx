@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
+
+import { getPopularMovies, getUpcomingMovies } from "../api/movies";
 
 import Grid from "../components/Grid";
 
-import { getMoviesByGenre } from "../api/movies";
-
-export default function GenreGrid() {
+export default function MovieTrend() {
   const navigation = useNavigate();
-  const genreId = window.location.pathname.split("/")[2];
-  const [title, setTitle] = useState("");
+  const path = window.location.pathname.split("/")[2];
+  const Title = path.charAt(0).toUpperCase() + path.slice(1);
   const currentPage = parseInt(window.location.pathname.split("/")[3]) || 1;
   const [movies, setMovies] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -19,7 +20,7 @@ export default function GenreGrid() {
   const [pageNumbers, setPageNumbers] = useState([]);
 
   useEffect(() => {
-    fetchMoviesByGenre();
+    fetchMovies();
 
     if (currentPage === 1) {
       setPrevButtonClass("opacity-50 cursor-not-allowed disabled");
@@ -35,12 +36,34 @@ export default function GenreGrid() {
 
     pageNumberGenerator();
 
-    document.title = `Movies | ${title} | Page ${currentPage}`;
-  }, [currentPage]);
+    document.title = `Movies | ${Title} | Page ${currentPage}`;
+  }, [currentPage, path]);
 
-  const fetchMoviesByGenre = async () => {
+  const fetchMovies = async () => {
     setLoading(true);
-    await getMoviesByGenre(genreId, currentPage)
+
+    if (path === "upcoming") {
+      fetchUpcomingMovies();
+    } else {
+      fetchPopularMovies();
+    }
+  };
+
+  const fetchPopularMovies = async () => {
+    await getPopularMovies(currentPage)
+      .then((res) => {
+        setMovies(res.data.results);
+        setTotalPages(res.data.total_pages);
+        setTotalResults(res.data.total_results);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const fetchUpcomingMovies = async () => {
+    await getUpcomingMovies(currentPage)
       .then((res) => {
         setMovies(res.data.results);
         setTotalPages(res.data.total_pages);
@@ -115,7 +138,7 @@ export default function GenreGrid() {
           <div className="container flex flex-row flex-wrap justify-center">
             {movies.length > 0 ? (
               <div className="flex flex-row flex-wrap justify-center">
-                <h1 className="text-4xl font-bold text-center  p-4">{title}</h1>
+                <h1 className="text-4xl font-bold text-center  p-4">{Title}</h1>
                 <div className="flex flex-row flex-wrap justify-between w-full md:pb-8 px-4 md:px-20">
                   <p className="text-sm md:text-base md:font-bold text-center ">
                     Page {currentPage} of {totalPages} Pages
@@ -135,22 +158,22 @@ export default function GenreGrid() {
           <div className="container flex flex-row justify-center text-primary-content my-10">
             <button
               className={
-                "p-4 mx-4 rounded bg-primary hover:bg-primary-focus" +
+                "p-2 mx-1 md:p-4 md:mx-4 rounded bg-primary hover:bg-primary-focus" +
                 prevButtonClass
               }
               onClick={() => {
-                navigation(`/genre/${genreId}/${currentPage - 1}`);
+                navigation(`/movie/${path}/${currentPage - 1}`);
               }}
             >
-              Previous
+              {"<"}
             </button>
             <div className="flex flex-row justify-center">
               {pageNumbers.map((number) => (
                 <button
                   key={number}
-                  className="h-14 w-14 mx-4 rounded bg-primary hover:bg-primary-focus"
+                  className="mx-1 p-2 md:h-14 md:w-14 md:mx-4 rounded bg-primary hover:bg-primary-focus"
                   onClick={() => {
-                    navigation(`/${genreId}/${number}`);
+                    navigation(`/movie/${path}/${number}`);
                   }}
                 >
                   {number}
@@ -159,14 +182,14 @@ export default function GenreGrid() {
             </div>
             <button
               className={
-                "p-4 mx-4 rounded bg-primary hover:bg-primary-focus" +
+                "p-2 mx-1 md:p-4 md:mx-4 rounded bg-primary hover:bg-primary-focus" +
                 nextButtonClass
               }
               onClick={() => {
-                navigation(`/genre/${genreId}/${currentPage + 1}`);
+                navigation(`/movie/${path}/${currentPage + 1}`);
               }}
             >
-              Next
+              {">"}
             </button>
           </div>
         </div>

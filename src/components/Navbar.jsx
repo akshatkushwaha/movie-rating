@@ -22,7 +22,28 @@ import { getMovieUsingQuery } from "../api/movies";
 import { getRequestToken } from "../api/auth";
 import { getAccountDetails } from "../api/account";
 
-const navigation = ["popular", "toprated", "upcoming", "nowplaying"];
+const navigation = [
+  {
+    name: "Home",
+    path: "/",
+  },
+  {
+    name: "Popular Movies",
+    path: "/movie/popular/1",
+  },
+  {
+    name: "Upcoming Movies",
+    path: "/movie/upcoming/1",
+  },
+  {
+    name: "Popular TV Shows",
+    path: "/tv/popular/1",
+  },
+  {
+    name: "On Air TV Shows",
+    path: "/tv/on_air/1",
+  },
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -104,6 +125,11 @@ export default function Navbar() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("session_id");
+    setLoggedIn(false);
+  };
+
   return (
     <Disclosure
       as="nav"
@@ -141,12 +167,12 @@ export default function Navbar() {
                   <div className="flex space-x-4">
                     {navigation.map((item) => {
                       const displayItem =
-                        item.charAt(0).toUpperCase() + item.slice(1);
+                        item.name.charAt(0).toUpperCase() + item.name.slice(1);
                       return (
-                        <Link to={`/${item}/1`} key={item}>
+                        <Link to={item.path} key={item.name}>
                           <div
                             className={classNames(
-                              path === item
+                              path === item.name
                                 ? "bg-base-100 text-base-content"
                                 : "text-base-content hover:bg-base-100 hover:text-white",
                               "px-3 py-2 rounded-md text-sm font-medium"
@@ -273,17 +299,17 @@ export default function Navbar() {
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="#"
+                            <button
                               className={classNames(
                                 active
                                   ? "bg-base-content text-base-100"
                                   : "text-base-content",
-                                "block px-4 py-2 text-sm"
+                                "block px-4 py-2 text-sm w-full"
                               )}
+                              onClick={handleLogout}
                             >
                               Sign out
-                            </a>
+                            </button>
                           )}
                         </Menu.Item>
                       </Menu.Items>
@@ -347,19 +373,19 @@ export default function Navbar() {
             <div className="space-y-1 px-2 pt-2 pb-3">
               {navigation.map((item) => {
                 const displayItem =
-                  item.charAt(0).toUpperCase() + item.slice(1);
+                  item.name.charAt(0).toUpperCase() + item.name.slice(1);
                 return (
                   <Disclosure.Button
-                    key={item}
+                    key={item.name}
                     as="a"
-                    href={`/${item}/1`}
+                    href={item.path}
                     className={classNames(
-                      item === path
+                      item.name === path
                         ? "bg-base-100 text-base-content"
                         : "text-base-content hover:bg-base-100 hover:text-white",
                       "block px-3 py-2 rounded-md text-base font-medium"
                     )}
-                    aria-current={item === path ? "page" : undefined}
+                    aria-current={item.name === path ? "page" : undefined}
                   >
                     {displayItem}
                   </Disclosure.Button>

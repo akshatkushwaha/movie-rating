@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 
+import { Link } from "react-router-dom";
+
 import {
   getPersonDetails,
   getPersonCombinedCredits,
   getPersonExternalIds,
-  getPersonImages,
-  getPersonTaggedImages,
 } from "../api/Person";
-import { getGenres } from "../api/movies";
-import MovieCard from "../components/MovieCard";
+
+import MovieCard from "../components/Card";
 
 export default function Person() {
   const id = window.location.pathname.split("/")[2];
@@ -16,18 +16,12 @@ export default function Person() {
   const [person, setPerson] = useState({});
   const [combinedCredits, setCombinedCredits] = useState({});
   const gender = ["Female", "Male", "Non-Binary"];
-  const [genreDB, setGenreDB] = useState([]);
   const [externalIds, setExternalIds] = useState({});
-  const [images, setImages] = useState({});
-  const [taggedImages, setTaggedImages] = useState({});
 
   useEffect(() => {
-    fetchGenresDB();
     fetchPersonDetails();
     fetchPersonCombinedCredits();
     fetchPersonsExternalIds();
-    // fetchPersonImages();
-    // fetchPersonTaggedImages();
   });
 
   const fetchPersonDetails = async () => {
@@ -42,24 +36,9 @@ export default function Person() {
     setCombinedCredits(response.data);
   };
 
-  const fetchGenresDB = async () => {
-    const genresDB = await getGenres();
-    setGenreDB(genresDB.data.genres);
-  };
-
   const fetchPersonsExternalIds = async () => {
     const response = await getPersonExternalIds(id);
     setExternalIds(response.data);
-  };
-
-  const fetchPersonImages = async () => {
-    const response = await getPersonImages(id);
-    setImages(response.data);
-  };
-
-  const fetchPersonTaggedImages = async () => {
-    const response = await getPersonTaggedImages(id);
-    setTaggedImages(response.data);
   };
 
   if (loading) {
@@ -187,10 +166,13 @@ export default function Person() {
           </div>
           <div className="container mx-auto md:px-10 bg-base-300">
             <h1 className="text-3xl font-bold p-4 md:py-8">Known for</h1>
-            {/* <div className="flex flex-row flex-wrap justify-center"> */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-2">
+            <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
               {combinedCredits?.cast?.map((movie) => (
-                <MovieCard key={movie.id} {...movie} genreDB={genreDB} />
+                <Link reloadDocument key={movie.id} to={`/movie/${movie.id}`}>
+                  <div className="mx-2 w-40 md:w-60">
+                    <MovieCard {...movie} />
+                  </div>
+                </Link>
               ))}
             </div>
           </div>

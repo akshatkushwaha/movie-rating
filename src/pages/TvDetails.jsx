@@ -8,7 +8,7 @@ import {
   getTvVideos,
   getTvImages,
   getSimilarTv,
-} from "../api/Tv";
+} from "../api/tv";
 
 export default function TvDetails() {
   const id = window.location.pathname.split("/")[2];
@@ -19,6 +19,10 @@ export default function TvDetails() {
   const [tvVideos, setTvVideos] = useState({});
   const [tvImages, setTvImages] = useState({});
   const [similarTv, setSimilarTv] = useState({});
+  const [modalImage, setModalImage] = useState(
+    "/avF57irLYDIn5rYhgLCnM0QlVmJ.jpg"
+  );
+  const [modalImageOpen, setModalImageOpen] = useState(false);
 
   useEffect(() => {
     fetchTvDetails();
@@ -107,7 +111,7 @@ export default function TvDetails() {
               </h1>
               <div className="py-2">
                 <h1 className="text-sm md:text-base text-center md:text-left font-mono font-semibold">
-                  {tv.episode_run_time} min | {tv.first_air_date}
+                  {tv.first_air_date}
                 </h1>
                 <h1 className="text-sm md:text-base text-center md:text-left font-mono font-semibold">
                   Total Seasons: {tv.number_of_seasons} | Total Episodes:{" "}
@@ -155,15 +159,15 @@ export default function TvDetails() {
           </div>
 
           {tvVideos?.results?.length > 0 && (
-            <div className="movie-details__videos container mx-auto">
+            <div className="container mx-auto">
               <h1 className="text-3xl font-bold p-4 md:p-10">Videos</h1>
-              <div className="movie-details__videos__scroll flex flex-row flex-nowrap overflow-x-auto">
+              <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
                 {tvVideos?.results?.map((video) => (
                   <div
                     key={video.id}
                     className="flex flex-col items-start mx-2 md:mx-3"
                   >
-                    <div className="movie-details__videos__scroll__image w-32 overflow-hidden rounded-lg">
+                    <div className="w-32 overflow-hidden rounded-lg">
                       <img
                         src={`https://img.youtube.com/vi/${video.key}/hqdefault.jpg`}
                         alt={video.name}
@@ -179,21 +183,20 @@ export default function TvDetails() {
           )}
 
           {tvImages?.backdrops?.length > 0 && (
-            <div className="movie-details__images container mx-auto">
+            <div className="container mx-auto">
               <h1 className="text-3xl font-bold p-4 md:p-10">Images</h1>
-              <div className="movie-details__images__scroll flex flex-row flex-nowrap overflow-x-auto">
+              <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
                 {tvImages?.backdrops?.map((image) => (
                   <div
                     key={image.file_path}
-                    className="flex flex-col items-start mx-2 md:mx-3"
+                    className="flex flex-col items-start mx-2 md:mx-3 cursor-pointer"
                     onClick={() => {
-                      window.open(
-                        `https://image.tmdb.org/t/p/original${image.file_path}`,
-                        "_blank"
-                      );
+                      setModalImage(image.file_path);
+                      setModalImageOpen(true);
+                      alert("clicked");
                     }}
                   >
-                    <div className="movie-details__images__scroll__image w-32 overflow-hidden rounded-lg">
+                    <div className="w-32 overflow-hidden rounded-lg">
                       <img
                         src={`https://image.tmdb.org/t/p/w500${image.file_path}`}
                         alt={image.file_path}
@@ -206,13 +209,13 @@ export default function TvDetails() {
           )}
 
           {tvCredits?.cast?.length > 0 && (
-            <div className="movie-details__cast container mx-auto">
+            <div className="container mx-auto">
               <h1 className="text-3xl font-bold p-4 md:p-10">Cast</h1>
-              <div className="movie-details__cast__scroll flex flex-row flex-nowrap overflow-x-auto">
+              <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
                 {tvCredits?.cast?.map((cast) => (
                   <Link key={cast.id} reloadDocument to={`/person/${cast.id}`}>
                     <div className="flex flex-col items-start mx-2 md:mx-3">
-                      <div className="movie-details__cast__scroll__image w-32 overflow-hidden rounded-lg">
+                      <div className="w-32 overflow-hidden rounded-lg">
                         <img
                           src={
                             cast.profile_path !== null
@@ -238,13 +241,13 @@ export default function TvDetails() {
           )}
 
           {/* Similar Tv Shows */}
-          <div className="movie-details__similar container mx-auto">
+          <div className="container mx-auto">
             <h1 className="text-3xl font-bold p-4 md:p-10">Similar Tv Shows</h1>
-            <div className="movie-details__similar__scroll flex flex-row flex-nowrap overflow-x-auto">
+            <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
               {similarTv?.results?.map((tv) => (
                 <Link key={tv.id} reloadDocument to={`/tv/${tv.id}`}>
                   <div className="flex flex-col items-start mx-2 md:mx-3">
-                    <div className="movie-details__similar__scroll__image w-32 overflow-hidden rounded-lg">
+                    <div className="w-32 overflow-hidden rounded-lg">
                       <img
                         src={
                           tv.poster_path

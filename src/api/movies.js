@@ -12,7 +12,7 @@ const getPopularMovies = async (page) =>
     },
   });
 
-const getGenres = async () =>
+const getMoviesGenres = async () =>
   await axios.get(BASE_URL + "/genre/movie/list", {
     params: {
       api_key: api_key,
@@ -128,7 +128,7 @@ const getMovieReviews = async (id) =>
 export {
   getPopularMovies,
   getMovie,
-  getGenres,
+  getMoviesGenres,
   getMovieProviders,
   getMovieDetails,
   getSimilarMovies,
