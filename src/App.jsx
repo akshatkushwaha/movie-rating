@@ -8,7 +8,7 @@ import GenreDBContext from "./Context/GenreDBContext";
 
 import { getSessionId } from "./api/auth";
 import { getMoviesGenres } from "./api/movies";
-import { getTvGenres } from "./api/tv";
+// import { getTvGenres } from "./api/tv";
 
 import Navbar from "./components/Navbar";
 import MovieTrend from "./pages/MovieTrend";
@@ -50,8 +50,9 @@ export default function App() {
 
   const fetchGenresDB = async () => {
     const movieGenreDB = await getMoviesGenres();
-    const tvGenreDB = await getTvGenres();
-    const genreDB = [...movieGenreDB.data.genres, ...tvGenreDB.data.genres];
+    // const tvGenreDB = await getTvGenres();
+    // const genreDB = [...movieGenreDB.data.genres, ...tvGenreDB.data.genres];
+    const genreDB = movieGenreDB.data.genres;
     setGenreDB(genreDB);
   };
 
