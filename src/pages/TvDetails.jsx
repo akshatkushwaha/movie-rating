@@ -10,6 +10,8 @@ import {
   getSimilarTv,
 } from "../api/tv";
 
+import { PlayCircleIcon } from "@heroicons/react/24/outline";
+
 export default function TvDetails() {
   const id = window.location.pathname.split("/")[2];
   const [loading, setLoading] = useState(true);
@@ -131,26 +133,13 @@ export default function TvDetails() {
                 </div>
               </div>
               {tv.homepage && (
-                <div className="flex flex-row flex-wrap items-end">
-                  <h1 className="text-lg md:text-xl font-bold">Homepage: </h1>
-                  <a href={tv.homepage} target="_blank" className="font-bold">
-                    {tv.homepage}
-                  </a>
-                </div>
+                <a href={tv.homepage} target="_blank" className="font-bold">
+                  <div className="flex flex-row flex-wrap items-center justify-center md:justify-start">
+                    <PlayCircleIcon className="h-8 w-8" />
+                    <span className="text-sm md:text-base">Watch Here</span>
+                  </div>
+                </a>
               )}
-              <div className="flex flex-row flex-wrap items-end">
-                <h1 className="text-lg md:text-xl font-bold">Network: </h1>
-                {tv?.networks?.map((network) => (
-                  <a
-                    key={network.id}
-                    href={`https://www.themoviedb.org/network/${network.id}`}
-                    target="_blank"
-                    className="pl-5 "
-                  >
-                    {network.name}
-                  </a>
-                ))}
-              </div>
               <div className="movie-details__overview container py-4">
                 <h1 className="text-3xl font-bold">Overview</h1>
                 <p className="text-lg py-4 text-justify">{tv.overview}</p>

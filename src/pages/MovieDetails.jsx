@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-
-import GenreDBContext from "../Context/GenreDBContext";
+import { Link, useParams } from "react-router-dom";
+import { PlayCircleIcon } from "@heroicons/react/24/outline";
 
 import MovieCard from "../components/Card";
 
@@ -13,7 +13,6 @@ import {
   getMovieImages,
   getMovieReviews,
 } from "../api/movies";
-import { Link, useParams } from "react-router-dom";
 
 export default function MovieDetails() {
   const { id } = useParams();
@@ -130,12 +129,12 @@ export default function MovieDetails() {
                 </div>
               </div>
               {movie.homepage && (
-                <div className="flex flex-row flex-wrap items-end">
-                  <h1 className="text-lg md:text-xl font-bold">Watch at: </h1>
-                  <a href={movie.homepage} target="_blank" className="pl-5 ">
-                    Streaming Service
-                  </a>
-                </div>
+                <a href={movie.homepage} target="_blank" className="font-bold">
+                  <div className="flex flex-row flex-wrap items-center justify-center md:justify-start">
+                    <PlayCircleIcon className="h-8 w-8" />
+                    <span className="text-sm md:text-base">Watch Here</span>
+                  </div>
+                </a>
               )}
               <div className="flex flex-row flex-wrap items-end">
                 <h1 className="text-lg md:text-xl font-bold">
