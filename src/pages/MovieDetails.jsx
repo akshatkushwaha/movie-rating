@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
-import { PlayCircleIcon } from "@heroicons/react/24/outline";
+import {
+  PlayCircleIcon,
+  XMarkIcon,
+  ArrowRightIcon,
+  ArrowLeftIcon,
+} from "@heroicons/react/24/outline";
 
 import MovieCard from "../components/Card";
 
@@ -23,7 +28,12 @@ export default function MovieDetails() {
   const [externalIds, setExternalIds] = useState({});
   const [videos, setVideos] = useState([]);
   const [images, setImages] = useState([]);
+  const [posters, setPosters] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [showFullOverview, setShowFullOverview] = useState(false);
+  const [fullScreenImage, setFullScreenImage] = useState(false);
+  const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
+  const [posterOrImage, setPosterOrImage] = useState("image");
 
   useEffect(() => {
     fetchMovie();
@@ -65,6 +75,7 @@ export default function MovieDetails() {
   const fetchMovieImages = async () => {
     const movieImages = await getMovieImages(id);
     setImages(movieImages.data.backdrops);
+    setPosters(movieImages.data.posters);
   };
 
   if (loading)
@@ -96,6 +107,56 @@ export default function MovieDetails() {
   else
     return (
       <>
+        {/* full screen movie Images popup */}
+        {fullScreenImage && (
+          <div className="z-40 fixed top-0 left-0 w-screen h-screen bg-gray-900 bg-opacity-80 flex flex-col items-center justify-center">
+            <div className="w-full h-full flex flex-row items-center justify-center py-4 px-4">
+              <button className="bg-gray-900 bg-opacity-80 text-gray-100 rounded-full p-2 mt-2">
+                <ArrowLeftIcon
+                  className="w-6 h-6"
+                  onClick={() => {
+                    fullScreenImageIndex === 0
+                      ? setFullScreenImageIndex(images.length - 1)
+                      : setFullScreenImageIndex(fullScreenImageIndex - 1);
+                  }}
+                />
+              </button>
+              <img
+                src={
+                  posterOrImage === "image"
+                    ? `https://image.tmdb.org/t/p/original/${images[fullScreenImageIndex].file_path}`
+                    : `https://image.tmdb.org/t/p/original/${posters[fullScreenImageIndex].file_path}`
+                }
+                alt={movie.title}
+                className="h-full w-full object-contain"
+              />
+              <button className="bg-gray-900 bg-opacity-80 text-gray-100 rounded-full p-2 mt-2">
+                <ArrowRightIcon
+                  className="w-6 h-6"
+                  onClick={() => {
+                    fullScreenImageIndex === images.length - 1
+                      ? setFullScreenImageIndex(0)
+                      : setFullScreenImageIndex(fullScreenImageIndex + 1);
+                  }}
+                />
+              </button>
+              <button
+                className="fixed top-10 right-10 bg-gray-900 bg-opacity-80 text-gray-100 rounded-full p-2 mt-2"
+                onClick={() => {
+                  setFullScreenImage(false);
+                  document.body.classList.remove("overflow-hidden");
+                }}
+              >
+                <XMarkIcon className="w-6 h-6" />
+              </button>
+            </div>
+            <p className="fixed bottom-10 bg-primary text-primary-content px-2 py-1 rounded-md">
+              {fullScreenImageIndex + 1} of{" "}
+              {posterOrImage === "image" ? images.length : posters.length}
+            </p>
+          </div>
+        )}
+        {/* end of full screen image popup */}
         <div className="w-full bg-base-300">
           <div className="flex flex-row flex-wrap container mx-auto md:px-8 py-5 md:py-20 justify-around bg-gray-900 rounded-xl">
             <div className="px-10 md:w-1/4 overflow-hidden rounded-lg md:mx-5">
@@ -155,7 +216,17 @@ export default function MovieDetails() {
               </div>
               <div className="container py-4">
                 <h1 className="text-3xl font-bold">Overview</h1>
-                <p className="text-lg py-4 text-justify">{movie.overview}</p>
+                <p className="text-lg py-4 text-justify">
+                  {showFullOverview
+                    ? movie.overview
+                    : movie.overview.substring(0, 600) + "..."}
+                  <span
+                    className="text-sm font-bold cursor-pointer"
+                    onClick={() => setShowFullOverview(!showFullOverview)}
+                  >
+                    {showFullOverview ? " Show Less" : " Show More"}
+                  </span>
+                </p>
               </div>
             </div>
           </div>
@@ -193,23 +264,52 @@ export default function MovieDetails() {
             <div className="container mx-auto">
               <h1 className="text-3xl font-bold p-4 md:p-10">Images</h1>
               <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
-                {images.map((image) => (
-                  <Link
-                    key={image.id}
-                    onClick={() => {
-                      window.open(
-                        `https://image.tmdb.org/t/p/original${image.file_path}`,
-                        "_blank"
-                      );
-                    }}
-                  >
-                    <div className="movie-details_videos w-72 md:w-96 mx-2 md:mx-5 overflow-hidden rounded-lg">
+                {images.map((image, index) => (
+                  <div key={index} className="mx-2 md:mx-3">
+                    <div
+                      className="movie-details_images w-72 overflow-hidden rounded-lg"
+                      onClick={() => {
+                        setFullScreenImageIndex(index);
+                        setPosterOrImage("image");
+                        setFullScreenImage(true);
+                        document.body.classList.add("overflow-hidden");
+                      }}
+                    >
                       <img
-                        src={`https://image.tmdb.org/t/p/w500${image.file_path}`}
-                        alt={image.name}
+                        src={
+                          "https://image.tmdb.org/t/p/w300" + image.file_path
+                        }
+                        alt={image.file_path}
                       />
                     </div>
-                  </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {posters.length > 0 && (
+            <div className="container mx-auto">
+              <h1 className="text-3xl font-bold p-4 md:p-10">Posters</h1>
+              <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
+                {posters.map((poster, index) => (
+                  <div key={index} className="mx-2 md:mx-3">
+                    <div
+                      className="movie-details_poster w-72 overflow-hidden rounded-lg"
+                      onClick={() => {
+                        setFullScreenImageIndex(index);
+                        setPosterOrImage("poster");
+                        setFullScreenImage(true);
+                        document.body.classList.add("overflow-hidden");
+                      }}
+                    >
+                      <img
+                        src={
+                          "https://image.tmdb.org/t/p/w300" + poster.file_path
+                        }
+                        alt={poster.file_path}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
