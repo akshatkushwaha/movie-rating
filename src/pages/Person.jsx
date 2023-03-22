@@ -23,7 +23,7 @@ export default function Person() {
     fetchPersonDetails();
     fetchPersonCombinedCredits();
     fetchPersonsExternalIds();
-  });
+  }, []);
 
   const fetchPersonDetails = async () => {
     const response = await getPersonDetails(id);
@@ -35,6 +35,7 @@ export default function Person() {
 
   const fetchPersonCombinedCredits = async () => {
     const response = await getPersonCombinedCredits(id);
+    console.log(response.data);
     setCombinedCredits(response.data);
   };
 
@@ -181,10 +182,14 @@ export default function Person() {
           <div className="container mx-auto md:px-10 bg-base-300">
             <h1 className="text-3xl font-bold p-4 md:py-8">Known for</h1>
             <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
-              {combinedCredits?.cast?.map((movie) => (
-                <Link reloadDocument key={movie.id} to={`/movie/${movie.id}`}>
+              {combinedCredits?.cast?.map((content) => (
+                <Link
+                  reloadDocument
+                  key={content.id}
+                  to={`/${content.media_type}/${content.id}`}
+                >
                   <div className="mx-2 w-40 md:w-60">
-                    <MovieCard {...movie} />
+                    <MovieCard {...content} />
                   </div>
                 </Link>
               ))}
