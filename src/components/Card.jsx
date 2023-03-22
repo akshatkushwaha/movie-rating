@@ -27,7 +27,7 @@ export default function Card(props) {
 
   return (
     <>
-      <div className="rounded overflow-hidden shadow-base-200 shadow-2xl transform transition duration-500 md:hover:scale-105 bg-base-100">
+      <div className="rounded overflow-hidden transform transition duration-500 md:hover:scale-105 bg-base-100">
         <div className="w-full rounded overflow-hidden">
           <img
             className="w-full h-60 md:h-full object-cover"
