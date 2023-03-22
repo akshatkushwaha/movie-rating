@@ -17,6 +17,7 @@ export default function Person() {
   const [combinedCredits, setCombinedCredits] = useState({});
   const gender = ["Female", "Male", "Non-Binary"];
   const [externalIds, setExternalIds] = useState({});
+  const [showFullBiography, setShowFullBiography] = useState(false);
 
   useEffect(() => {
     fetchPersonDetails();
@@ -27,6 +28,7 @@ export default function Person() {
   const fetchPersonDetails = async () => {
     const response = await getPersonDetails(id);
     document.title = `Person | ${response.data.name}`;
+
     setPerson(response.data);
     setLoading(false);
   };
@@ -39,6 +41,10 @@ export default function Person() {
   const fetchPersonsExternalIds = async () => {
     const response = await getPersonExternalIds(id);
     setExternalIds(response.data);
+  };
+
+  const toggleBiography = () => {
+    setShowFullBiography(!showFullBiography);
   };
 
   if (loading) {
@@ -109,7 +115,15 @@ export default function Person() {
                 </span>
               </div>
               <p className="text-base md:text-lg text-justify pt-2 indent-10">
-                {person.biography}
+                {showFullBiography
+                  ? person.biography
+                  : person.biography.slice(0, 600) + "..."}
+                <span
+                  className="text-xs md:text-sm font-bold cursor-pointer"
+                  onClick={toggleBiography}
+                >
+                  {showFullBiography ? "\tShow Less" : "\tShow More"}
+                </span>
               </p>
               {/* External Links */}
               <div className="flex flex-row flex-wrap justify-between md:justify-start pt-4">
