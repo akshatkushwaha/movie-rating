@@ -10,21 +10,31 @@ import {
   getSimilarTv,
 } from "../api/tv";
 
-import { PlayCircleIcon } from "@heroicons/react/24/outline";
+import {
+  PlayCircleIcon,
+  XMarkIcon,
+  ArrowRightIcon,
+  ArrowLeftIcon,
+} from "@heroicons/react/24/outline";
+import FullScreenImagePopup from "../components/FullScreenImagePopup";
 
 export default function TvDetails() {
   const id = window.location.pathname.split("/")[2];
   const [loading, setLoading] = useState(true);
   const [tv, setTv] = useState({});
   const [tvCredits, setTvCredits] = useState({});
-  const [episodeGroups, setEpisodeGroups] = useState({});
-  const [tvVideos, setTvVideos] = useState({});
-  const [tvImages, setTvImages] = useState({});
-  const [similarTv, setSimilarTv] = useState({});
-  const [modalImage, setModalImage] = useState(
-    "/avF57irLYDIn5rYhgLCnM0QlVmJ.jpg"
-  );
-  const [modalImageOpen, setModalImageOpen] = useState(false);
+  // const [episodeGroups, setEpisodeGroups] = useState([]);
+  const [tvVideos, setTvVideos] = useState([]);
+  const [tvImages, setTvImages] = useState([]);
+  const [tvPoster, setTvPoster] = useState([]);
+
+  const [similarTv, setSimilarTv] = useState([]);
+
+  const [fullScreenImage, setFullScreenImage] = useState(false);
+  const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
+  const [fullScreenImageLoading, setFullScreenImageLoading] = useState(true);
+
+  const [posterOrImage, setPosterOrImage] = useState(true);
 
   useEffect(() => {
     fetchTvDetails();
@@ -46,19 +56,20 @@ export default function TvDetails() {
     setTvCredits(response.data);
   };
 
-  const fetchEpisodeGroups = async () => {
-    const response = await getEpisodeGroups(id);
-    setEpisodeGroups(response.data);
-  };
+  // const fetchEpisodeGroups = async () => {
+  //   const response = await getEpisodeGroups(id);
+  //   setEpisodeGroups(response.data);
+  // };
 
   const fetchTvVideos = async () => {
     const response = await getTvVideos(id);
-    setTvVideos(response.data);
+    setTvVideos(response.data.results);
   };
 
   const fetchTvImages = async () => {
     const response = await getTvImages(id);
-    setTvImages(response.data);
+    setTvImages(response.data.backdrops);
+    setTvPoster(response.data.posters);
   };
 
   const fetchSimilarTv = async () => {
@@ -95,6 +106,14 @@ export default function TvDetails() {
   } else
     return (
       <>
+        <FullScreenImagePopup
+          fullScreenImageIndex={fullScreenImageIndex}
+          data={posterOrImage ? tvImages : tvPoster}
+          display={fullScreenImage}
+          setDisplay={setFullScreenImage}
+          title={tv.name}
+        />
+
         <div className="w-full bg-base-300">
           <div className="movie-details flex flex-row flex-wrap container mx-auto md:px-8 py-5 md:py-20 justify-around bg-gray-900 rounded-xl">
             <div className="movie-details__poster px-10 md:w-1/4 overflow-hidden rounded-lg md:mx-5">
@@ -147,23 +166,59 @@ export default function TvDetails() {
             </div>
           </div>
 
-          {tvVideos?.results?.length > 0 && (
+          {tvVideos?.length > 0 && (
             <div className="container mx-auto">
               <h1 className="text-3xl font-bold p-4 md:p-10">Videos</h1>
               <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
-                {tvVideos?.results?.map((video) => (
-                  <div
+                {tvVideos?.map((video) => (
+                  <Link
                     key={video.id}
-                    className="flex flex-col items-start mx-2 md:mx-3"
+                    onClick={() => {
+                      window.open(
+                        `https://www.youtube.com/watch?v=${video.key}`,
+                        "_blank"
+                      );
+                    }}
                   >
-                    <div className="w-32 overflow-hidden rounded-lg">
-                      <img
-                        src={`https://img.youtube.com/vi/${video.key}/hqdefault.jpg`}
-                        alt={video.name}
-                      />
+                    <div className="flex flex-col items-start mx-2 md:mx-3">
+                      <div className="w-32 overflow-hidden rounded-lg">
+                        <img
+                          src={`https://img.youtube.com/vi/${video.key}/hqdefault.jpg`}
+                          alt={video.name}
+                        />
+                      </div>
+                      <div className="flex flex-col w-32 line-clamp-4">
+                        <span className="text-base font-bold">
+                          {video.name}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-col w-32 line-clamp-4">
-                      <span className="text-base font-bold">{video.name}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {tvImages?.length > 0 && (
+            <div className="container mx-auto">
+              <h1 className="text-3xl font-bold p-4 md:p-10">Images</h1>
+              <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
+                {tvImages?.map((image, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col items-start mx-2 md:mx-3 cursor-pointer"
+                    onClick={() => {
+                      setFullScreenImage(true);
+                      setPosterOrImage("image");
+                      setFullScreenImageIndex(index);
+                      document.body.classList.add("overflow-hidden");
+                    }}
+                  >
+                    <div className="w-72 overflow-hidden rounded-lg">
+                      <img
+                        src={`https://image.tmdb.org/t/p/w500${image.file_path}`}
+                        alt={image.file_path}
+                      />
                     </div>
                   </div>
                 ))}
@@ -171,21 +226,22 @@ export default function TvDetails() {
             </div>
           )}
 
-          {tvImages?.backdrops?.length > 0 && (
+          {tvPoster?.length > 0 && (
             <div className="container mx-auto">
-              <h1 className="text-3xl font-bold p-4 md:p-10">Images</h1>
+              <h1 className="text-3xl font-bold p-4 md:p-10">Posters</h1>
               <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
-                {tvImages?.backdrops?.map((image) => (
+                {tvPoster?.map((image, index) => (
                   <div
-                    key={image.file_path}
+                    key={index}
                     className="flex flex-col items-start mx-2 md:mx-3 cursor-pointer"
                     onClick={() => {
-                      setModalImage(image.file_path);
-                      setModalImageOpen(true);
-                      alert("clicked");
+                      setFullScreenImage(true);
+                      setPosterOrImage("poster");
+                      setFullScreenImageIndex(index);
+                      document.body.classList.add("overflow-hidden");
                     }}
                   >
-                    <div className="w-32 overflow-hidden rounded-lg">
+                    <div className="w-72 overflow-hidden rounded-lg">
                       <img
                         src={`https://image.tmdb.org/t/p/w500${image.file_path}`}
                         alt={image.file_path}
