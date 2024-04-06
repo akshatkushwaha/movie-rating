@@ -111,6 +111,7 @@ export default function MovieDetails() {
         {/* full screen movie Images popup */}
         <FullScreenImagePopup
           fullScreenImageIndex={fullScreenImageIndex}
+          setFullScreenImageIndex={setFullScreenImageIndex}
           data={posterOrImage === "poster" ? posters : images}
           display={fullScreenImage}
           setDisplay={setFullScreenImage}

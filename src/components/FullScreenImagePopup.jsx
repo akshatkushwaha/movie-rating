@@ -6,9 +6,6 @@ import {
 } from "@heroicons/react/24/outline";
 
 export default function FullScreenImagePopup(props) {
-  const [fullScreenImageIndex, setFullScreenImageIndex] = useState(
-    props.fullScreenImageIndex
-  );
   const [fullScreenImageLoading, setFullScreenImageLoading] = useState(true);
 
   return (
@@ -20,9 +17,9 @@ export default function FullScreenImagePopup(props) {
               <ArrowLeftIcon
                 className="w-8 h-8 fixed left-2 md:left-10 bg-accent text-accent-content rounded-full p-2"
                 onClick={() => {
-                  fullScreenImageIndex === 0
-                    ? setFullScreenImageIndex(props.data.length - 1)
-                    : setFullScreenImageIndex(fullScreenImageIndex - 1);
+                  props.fullScreenImageIndex === 0
+                    ? props.setFullScreenImageIndex(props.data.length - 1)
+                    : props.setFullScreenImageIndex(props.fullScreenImageIndex - 1);
 
                   setFullScreenImageLoading(true);
                 }}
@@ -65,9 +62,9 @@ export default function FullScreenImagePopup(props) {
               <ArrowRightIcon
                 className="w-8 h-8 fixed right-2 md:right-10 bg-accent text-accent-content rounded-full p-2"
                 onClick={() => {
-                  fullScreenImageIndex === props.data.length - 1
-                    ? setFullScreenImageIndex(0)
-                    : setFullScreenImageIndex(fullScreenImageIndex + 1);
+                  props.fullScreenImageIndex === props.data.length - 1
+                    ? props.setFullScreenImageIndex(0)
+                    : props.setFullScreenImageIndex(props.fullScreenImageIndex + 1);
 
                   setFullScreenImageLoading(true);
                 }}
