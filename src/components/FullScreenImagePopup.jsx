@@ -50,7 +50,7 @@ export default function FullScreenImagePopup(props) {
               </div>
             </div>
             <img
-              src={`https://image.tmdb.org/t/p/original/${props.data[fullScreenImageIndex].file_path}`}
+              src={`https://image.tmdb.org/t/p/original/${props.data[props.fullScreenImageIndex].file_path}`}
               alt={props.title}
               onLoad={() => setFullScreenImageLoading(false)}
               className={
@@ -81,7 +81,7 @@ export default function FullScreenImagePopup(props) {
             </button>
           </div>
           <p className="fixed bottom-10 bg-primary text-primary-content px-2 py-1 rounded-md">
-            {fullScreenImageIndex + 1} of {props.data.length}
+            {props.fullScreenImageIndex + 1} of {props.data.length}
           </p>
         </div>
       )}
