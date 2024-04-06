@@ -228,7 +228,7 @@ export default function MovieDetails() {
                 {images?.map((image, index) => (
                   <div key={index} className="mx-2 md:mx-3">
                     <div
-                      className="movie-details_images w-72 overflow-hidden rounded-lg"
+                      className="movie-details_images w-72 overflow-hidden rounded-lg cursor-pointer"
                       onClick={() => {
                         setFullScreenImageIndex(index);
                         setPosterOrImage("image");
@@ -255,7 +255,7 @@ export default function MovieDetails() {
                 {posters.map((poster, index) => (
                   <div key={index} className="mx-2 md:mx-3">
                     <div
-                      className="movie-details_poster w-72 overflow-hidden rounded-lg"
+                      className="movie-details_poster w-72 overflow-hidden rounded-lg cursor-pointer"
                       onClick={() => {
                         setFullScreenImageIndex(index);
                         setPosterOrImage("poster");
