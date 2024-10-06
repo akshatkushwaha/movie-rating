@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import {
     getTvDetails,
     getTvCredits,
-    getEpisodeGroups,
     getTvVideos,
     getTvImages,
     getSimilarTv,
+    getSeasonsDetails,
 } from "../api/tv";
 
 import {
@@ -23,7 +23,6 @@ export default function TvDetails() {
     const [loading, setLoading] = useState(true);
     const [tv, setTv] = useState({});
     const [tvCredits, setTvCredits] = useState({});
-    // const [episodeGroups, setEpisodeGroups] = useState([]);
     const [tvVideos, setTvVideos] = useState([]);
     const [tvImages, setTvImages] = useState([]);
     const [tvPoster, setTvPoster] = useState([]);
@@ -32,14 +31,12 @@ export default function TvDetails() {
 
     const [fullScreenImage, setFullScreenImage] = useState(false);
     const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
-    const [fullScreenImageLoading, setFullScreenImageLoading] = useState(true);
 
     const [posterOrImage, setPosterOrImage] = useState(true);
 
     useEffect(() => {
         fetchTvDetails();
         fetchTvCredits();
-        // fetchEpisodeGroups();
         fetchTvVideos();
         fetchTvImages();
         fetchSimilarTv();
@@ -55,11 +52,6 @@ export default function TvDetails() {
         const response = await getTvCredits(id);
         setTvCredits(response.data);
     };
-
-    // const fetchEpisodeGroups = async () => {
-    //   const response = await getEpisodeGroups(id);
-    //   setEpisodeGroups(response.data);
-    // };
 
     const fetchTvVideos = async () => {
         const response = await getTvVideos(id);
@@ -164,6 +156,36 @@ export default function TvDetails() {
                             </div>
                         </div>
                     </div>
+
+                    {tv.seasons?.length > 0 && (
+                        <div className="container mx-auto">
+                            <h1 className="text-3xl font-bold p-4 md:p-10">Seasons</h1>
+                            <div className="_scroll flex flex-row flex-nowrap overflow-x-auto">
+                                {tv.seasons?.map((season) => (
+                                    <div
+                                        key={season.id}
+                                        className="flex flex-col items-start mx-2 md:mx-3"
+                                    >
+                                        <div className="w-32 overflow-hidden rounded-lg">
+                                            <img
+                                                src={`https://image.tmdb.org/t/p/w500${season.file_path}`}
+                                                alt={season.name}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col w-32 line-clamp-4">
+                                            <span className="text-base font-bold">
+                                                {season.name}
+                                            </span>
+                                            <br />
+                                            <span className="text-base font-mono">
+                                                {season.air_date}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {tvVideos?.length > 0 && (
                         <div className="container mx-auto">
