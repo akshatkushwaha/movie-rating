@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import {
-    getTvDetails,
-    getTvCredits,
-    getTvVideos,
-    getTvImages,
-    getSimilarTv,
-    getSeasonsDetails,
-} from "../api/tv";
+import { getTvDetails, getTvCredits, getTvVideos, getTvImages, getSimilarTv } from "../api/tv";
 
 import {
     PlayCircleIcon,
@@ -17,6 +10,7 @@ import {
     ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
 import FullScreenImagePopup from "../components/FullScreenImagePopup";
+import VotingsHeatMapView from "../components/VotingsHeatMap";
 
 export default function TvDetails() {
     const id = window.location.pathname.split("/")[2];
@@ -31,6 +25,8 @@ export default function TvDetails() {
 
     const [fullScreenImage, setFullScreenImage] = useState(false);
     const [fullScreenImageIndex, setFullScreenImageIndex] = useState(0);
+
+    const [votingsHeatMapView, setVotingsHeatMapView] = useState(false);
 
     const [posterOrImage, setPosterOrImage] = useState(true);
 
@@ -105,6 +101,13 @@ export default function TvDetails() {
                     title={tv.name}
                 />
 
+                <VotingsHeatMapView
+                    tvId={tv.id}
+                    numberOfSeasons={tv.number_of_seasons}
+                    display={votingsHeatMapView}
+                    setDisplay={setVotingsHeatMapView}
+                />
+
                 <div className="w-full bg-base-300">
                     <div className="movie-details flex flex-row flex-wrap container mx-auto md:px-8 py-5 md:py-20 justify-around bg-gray-900 rounded-xl">
                         <div className="movie-details__poster px-10 md:w-1/4 overflow-hidden rounded-lg md:mx-5">
@@ -122,6 +125,24 @@ export default function TvDetails() {
                                 {tv.name}
                             </h1>
                             <div className="py-2">
+                                <div className="flex flex-row items-center justify-center md:justify-start">
+                                    <span className="text-xl md:text-2xl font-bold">
+                                        {tv.vote_average}
+                                    </span>
+                                    <span className="text-xl md:text-2xl font-bold">/10</span>
+                                    <span className="text-sm md:text-base font-mono ml-2">
+                                        ({tv.vote_count} votes)
+                                    </span>
+                                </div>
+                                <button
+                                    className="flex flex-row items-center justify-center md:justify-start text-sm md:text-base font-mono font-semibold bg-gray-800 rounded-full p-2 mt-2"
+                                    onClick={() => {
+                                        setVotingsHeatMapView(true);
+                                        document.body.classList.add("overflow-hidden");
+                                    }}
+                                >
+                                    <span className="ml-2">View Votes Heatmap</span>
+                                </button>
                                 <h1 className="text-sm md:text-base text-center md:text-left font-mono font-semibold">
                                     {tv.first_air_date}
                                 </h1>
