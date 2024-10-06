@@ -168,7 +168,7 @@ export default function TvDetails() {
                                     >
                                         <div className="w-32 overflow-hidden rounded-lg">
                                             <img
-                                                src={`https://image.tmdb.org/t/p/w500${season.file_path}`}
+                                                src={`https://image.tmdb.org/t/p/w500${season.poster_path}`}
                                                 alt={season.name}
                                             />
                                         </div>
